@@ -205,6 +205,29 @@ body{overflow-x:hidden}
   .logo h1{font-size:20px}
 }
 .panel .rowc{padding-inline:0}
+
+/* documents on a phone: reflow instead of shrinking */
+.paper .mq,.paper .mdesc{display:none}
+.setup{display:flex;gap:12px;align-items:center;justify-content:space-between;flex-wrap:wrap;background:var(--accent-soft);border:1px solid var(--line);border-radius:var(--r);padding:10px 14px;margin-bottom:14px;font-size:14px}
+@media (max-width:640px){
+  .paper{min-width:0;padding:22px 18px 0;border-radius:6px}
+  .paper .phd{flex-direction:column;gap:10px}
+  .paper .pbiz{text-align:left}
+  .paper .ptr{margin-top:18px}
+  .paper h2{font-size:28px}
+  .paper .pcols{flex-direction:column;gap:14px}
+  .paper .pmeta{min-width:0}
+  .paper th:nth-child(1),.paper td:nth-child(1),.paper th:nth-child(3),.paper td:nth-child(3),.paper th:nth-child(4),.paper td:nth-child(4),.paper th:nth-child(5),.paper td:nth-child(5){display:none}
+  .paper td{font-size:14px}
+  .paper td .mq{display:block;color:#5c6166;font-size:12.5px;margin-top:3px}
+  .paper td .mdesc{display:block;color:#5c6166;font-size:12.5px;margin-top:2px}
+  .paper .pmid{flex-direction:column;gap:14px}
+  .paper .ptots{width:100%}
+  .paper .pbot{flex-direction:column;align-items:stretch}
+  .paper .psig{width:100%}
+  .paper .pband{margin:26px -18px 0;font-size:13px}
+  .paper .pbl p span{min-width:104px}
+}
 </style>
 
 <div class="wrap" id="app"></div>
@@ -219,7 +242,7 @@ body{overflow-x:hidden}
 const TYPES={quote:{label:"Quote",title:"Quotation",pre:"QT-"},invoice:{label:"Invoice",title:"Invoice",pre:"INV-"},receipt:{label:"Receipt",title:"Receipt",pre:"RC-"}};
 const PAY=["Mobile Money (MoMo)","Cash","Bank","Other"];
 const CURRENCIES=["UGX","KES","TZS","RWF","USD","EUR","GBP"];
-const S={docs:[],clients:[],services:[],settings:{name:"Sonart Images",phone:"",email:"sonartphotos@gmail.com",address:"Uganda",currency:"UGX",payInfo:"",momoNumber:"",momoName:"",bankName:"",bankAcc:"",bankAccName:"",tagline:"",brand:"#111113",terms:"Quote valid for 14 days. A 50% deposit confirms the booking."},view:"list",tab:"all",q:"",cur:null,edit:null,ce:null,se:null,cc:null,rng:{preset:"month",from:"",to:""},user:"",mode:"in",msg:""};
+const S={docs:[],clients:[],services:[],settings:{name:"",phone:"",email:"",address:"",currency:"UGX",payInfo:"",momoNumber:"",momoName:"",bankName:"",bankAcc:"",bankAccName:"",tagline:"",brand:"#111113",terms:"Quote valid for 14 days. A 50% deposit confirms the booking."},view:"list",tab:"all",q:"",cur:null,edit:null,ce:null,se:null,cc:null,rng:{preset:"month",from:"",to:""},user:"",mode:"in",msg:""};
 let DB=null;const LS="sonart-billing-v1";
 const CFG=(typeof window!=="undefined"&&window.BITABO_CONFIG)||{};
 const CLOUD=!!(CFG.SUPABASE_URL&&CFG.SUPABASE_ANON_KEY&&window.supabase);
@@ -292,7 +315,7 @@ function render(){
 }
 function topHTML(){
   const nav=[["list","Documents"],["clients","Clients"],["services","Services"],["totals","Totals"]].map(([k,l])=>`<button data-a="nav" data-t="${k}" aria-pressed="${S.view===k||(k==="clients"&&S.view==="client")}">${l}</button>`).join("");
-  return `<div class="top"><div class="brand"><div class="logo"><span class="mark" aria-hidden="true">B</span><h1>Bitabo</h1></div><span>${esc(S.settings.name||"Your business")} · Quotes, invoices and receipts</span></div>
+  return `<div class="top"><div class="brand"><div class="logo"><span class="mark" aria-hidden="true">B</span><h1>Bitabo</h1></div><span>Quotes, invoices and receipts</span></div>
   <div class="row"><button class="btn primary" data-a="new" data-t="receipt">New receipt</button>
   <button class="btn" data-a="new" data-t="invoice">New invoice</button>
   <button class="btn" data-a="new" data-t="quote">New quote</button>
@@ -317,7 +340,8 @@ function listHTML(){
     <span class="amt">${money(amt)}</span><span class="pill ${cl}">${esc(st)}</span></button>`}).join("")
    :`<div class="empty"><h2>${S.docs.length?"Nothing matches":"No documents yet"}</h2><p>${S.docs.length?"Try another filter or search.":"Type a client and what they paid for to make a receipt in seconds. Or start with a quote and turn it into an invoice when they accept."}</p>
      ${S.docs.length?"":`<div class="row" style="justify-content:center"><button class="btn primary" data-a="new" data-t="receipt">Make a receipt</button><button class="btn" data-a="new" data-t="quote">Create a quote</button><button class="btn" data-a="examples">Add example data</button></div>`}</div>`;
-  return topHTML()+`<div class="sum"><div class="${over>0?"over":""}"><small>Owed to you</small><b>${money(owed)}</b></div><div><small>Overdue</small><b>${money(over)}</b></div><div><small>Received this month</small><b>${money(rec)}</b></div><div><small>Quotes waiting</small><b>${open}</b></div></div>
+  const setup=!S.settings.name?`<div class="setup"><span>Add your business name, logo and payment details so they appear on every document.</span><button class="btn small" data-a="settings">Business details</button></div>`:"";
+  return topHTML()+setup+`<div class="sum"><div class="${over>0?"over":""}"><small>Owed to you</small><b>${money(owed)}</b></div><div><small>Overdue</small><b>${money(over)}</b></div><div><small>Received this month</small><b>${money(rec)}</b></div><div><small>Quotes waiting</small><b>${open}</b></div></div>
   <div class="bar"><div class="tabs">${tabs}</div><input class="search" id="q" type="search" placeholder="Search by number, client, phone or service" value="${esc(S.q)}"></div>
   <div class="list">${body}</div>`;
 }
@@ -391,7 +415,7 @@ function paperHTML(d){
    <div class="pcols"><div><div class="plab">${p.toLabel}</div><div class="pcname">${esc(p.client.name||"-")}</div>${cs?`<div class="pcsub">${cs}</div>`:""}</div>
     <div class="pmeta">${p.meta.map(m=>`<div><span>${esc(m[0])}</span><b>${esc(m[1])}</b></div>`).join("")}</div></div>
    <table><thead><tr><th class="n">#</th><th>Item</th><th>Description</th><th class="r">Qty</th><th class="r">Price</th><th class="r">Total</th></tr></thead><tbody>
-    ${p.rows.map((l,i)=>`<tr><td class="n">${i+1}</td><td>${esc(l.d)}</td><td>${esc(l.n||"")}</td><td class="r">${num(l.q)}</td><td class="r">${money(l.p)}</td><td class="r">${money(num(l.q)*num(l.p))}</td></tr>`).join("")}</tbody></table>
+    ${p.rows.map((l,i)=>`<tr><td class="n">${i+1}</td><td>${esc(l.d)}${l.n?`<div class="mdesc">${esc(l.n)}</div>`:""}<div class="mq">${num(l.q)} × ${money(l.p)}</div></td><td>${esc(l.n||"")}</td><td class="r">${num(l.q)}</td><td class="r">${money(l.p)}</td><td class="r">${money(num(l.q)*num(l.p))}</td></tr>`).join("")}</tbody></table>
    <div class="pmid"><div class="pthanks">${p.thanks}</div><div class="ptots">${p.totals.map(t=>`<div class="tt-${t.t}"><span>${esc(t.k)}</span><span>${t.v}</span></div>`).join("")}</div></div>
    <div class="pbot"><div class="pbl">${payBlock}${p.notes?`<h4>Notes</h4><p class="pt">${esc(p.notes)}</p>`:""}${p.terms?`<h4>Terms and conditions</h4><p class="pt sm">${esc(p.terms)}</p>`:""}</div>
     <div class="psig">${s.sig?`<img src="${s.sig}" alt="">`:`<div class="gap"></div>`}<div class="sl"></div><b>Authorized sign</b></div></div>
@@ -610,7 +634,7 @@ function settingsHTML(){
   const s=S.settings;
   return `<button class="btn back" data-a="list">‹ Back</button><form id="sf" class="stack"><h2>Business details</h2>
   <div class="panel"><div class="grid2">
-   <label>Business name<input id="s_name" value="${esc(s.name)}" placeholder="e.g. Sonart Images"></label>
+   <label>Business name<input id="s_name" value="${esc(s.name)}" placeholder="e.g. Your business name"></label>
    <label>Currency<select id="s_cur">${CURRENCIES.map(c=>`<option ${s.currency===c?"selected":""}>${c}</option>`).join("")}</select></label>
    <label>Phone<input id="s_phone" value="${esc(s.phone)}" inputmode="tel" placeholder="07********"></label>
    <label>Email<input id="s_email" value="${esc(s.email)}" inputmode="email" placeholder="you@business.com"></label>
@@ -795,8 +819,6 @@ function refreshTotals(){
 function fitPaper(){
   const p=document.querySelector(".paper"),b=document.querySelector(".paperbox");if(!p||!b)return;
   p.style.zoom="";p.style.width="";p.style.maxWidth="";p.style.minWidth="";
-  const avail=b.clientWidth,full=794;
-  if(avail>0&&avail<full){p.style.width=full+"px";p.style.maxWidth="none";p.style.minWidth="0";p.style.zoom=(avail/full).toFixed(4)}
 }
 window.addEventListener("resize",fitPaper);
 function go(view,id){S.view=view;if(id!==undefined)S.cur=id;render();window.scrollTo(0,0)}
@@ -940,7 +962,7 @@ document.addEventListener("submit",async e=>{
     }
     toast(TYPES[d.type].label+" saved");go("view",d.id);
   }else if(e.target.id==="sf"){
-    S.settings=Object.assign({},S.settings,{name:v("s_name").trim()||"Billing",currency:v("s_cur"),phone:v("s_phone").trim(),email:v("s_email").trim(),address:v("s_addr").trim(),payInfo:v("s_pay"),terms:v("s_terms"),momoNumber:v("s_momo").trim(),momoName:v("s_momoname").trim(),bankName:v("s_bank").trim(),bankAcc:v("s_acc").trim(),bankAccName:v("s_accname").trim(),tagline:v("s_tag").trim(),brand:v("s_brand")||"#111113"});
+    S.settings=Object.assign({},S.settings,{name:v("s_name").trim(),currency:v("s_cur"),phone:v("s_phone").trim(),email:v("s_email").trim(),address:v("s_addr").trim(),payInfo:v("s_pay"),terms:v("s_terms"),momoNumber:v("s_momo").trim(),momoName:v("s_momoname").trim(),bankName:v("s_bank").trim(),bankAcc:v("s_acc").trim(),bankAccName:v("s_accname").trim(),tagline:v("s_tag").trim(),brand:v("s_brand")||"#111113"});
     await saveSettings();toast("Details saved");go("list");
   }else if(e.target.id==="cf"){
     const o={id:S.ce?S.ce.id:uid(),name:v("c_name").trim(),phone:v("c_phone").trim(),email:v("c_email").trim(),address:v("c_addr").trim()};
