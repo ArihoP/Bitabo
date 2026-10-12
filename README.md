@@ -5,9 +5,13 @@ Make **quotes, invoices and receipts** in a few taps, with your own logo on ever
 ## What it does
 
 - Quotes, invoices and receipts, numbered automatically (QT-0001, INV-0001, RC-0001)
-- Clean black-and-white layout: centred logo, big title, dark table header and total bar, green "Amount Paid" and orange "Balance Due"
+- **One layout for everything:** logo and business details at the top, a big title, billed-to and number/date block, an itemised table, totals, payment details, notes, terms, signature and a footer line. Quotes, invoices and receipts all use it, and the on-screen preview and the PDF are always the same
+- Payment status in colour: "Paid so far" in green, "Balance due" in orange, and a PAID stamp when settled
 - Your logo, business details and signature ("Authorized Sign") on every document and PDF
 - **Quick receipt:** type the client, what they paid for and the amount paid today. Bitabo adds what that client already paid for the same service and shows the balance
+- **Client pages:** click a client to see how much they were billed, how much they have paid and their balance, with every invoice, receipt and quote
+- **Totals page:** how much money has gone through Bitabo, for this month, the last 30 days, this year, all time or dates you choose, split by payment method, client, month and service
+- Invoice and receipt numbers only ever go up and are never reused, even if you delete a document
 - **Clients** and **Services** pages: save them once, pick them next time. New clients and services are also saved automatically
 - Turn an accepted quote into an invoice
 - Record payments by issuing receipts. Invoices show Unpaid, Part paid, Paid or Overdue
@@ -24,6 +28,14 @@ Make **quotes, invoices and receipts** in a few taps, with your own logo on ever
 3. Tap **Save details**.
 
 Your logo now shows on every quote, invoice and receipt, and in the PDFs.
+
+## Add your payment details and footer line
+
+In **Business details**, fill in **Payment details** (Mobile Money number and name, bank, account number, account name). They are printed as neat labelled lines on every quote and invoice. The **Footer line** (for example `PHOTOGRAPHY | VIDEOGRAPHY`) is printed as a black band at the bottom of every document.
+
+## Change the document colour
+
+In **Business details**, pick a **Document colour**. It colours the table header, the total bar, the line under the header and the footer band on every document and PDF. The default is the original dark look. Light blue works well too. The text on the bands switches between dark and white by itself so it stays easy to read.
 
 ## Add your signature
 

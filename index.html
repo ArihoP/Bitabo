@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <link rel="manifest" href="manifest.json">
-<meta name="theme-color" content="#0C6A5A">
+<meta name="theme-color" content="#17639B">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="Bitabo">
@@ -19,8 +19,8 @@
 <style>
 /* Layout: one working column. Summary strip, then a filterable list; editor and paper preview replace the list. */
 :root{
-  --bg:#F2F5F3; --surface:#FFFFFF; --ink:#10201B; --muted:#58696A; --line:#DCE3E0;
-  --accent:#0C6A5A; --accent-ink:#FFFFFF; --accent-soft:#DDEFE9;
+  --bg:#F3F8FD; --surface:#FFFFFF; --ink:#0F1E2B; --muted:#57697A; --line:#D9E6F2;
+  --accent:#17639B; --accent-ink:#FFFFFF; --accent-soft:#E3EFF9; --accent-fg:#17639B;
   --warn:#9A5206; --warn-soft:#FBEBD3; --bad:#B0261D; --bad-soft:#FADCD9; --good:#17713F; --good-soft:#D9F0E2;
   --paper:#FFFFFF; --paper-ink:#141A18; --paper-muted:#5E6A66; --paper-line:#D9DFDC;
   --f-display:"Bricolage Grotesque","Helvetica Neue",Arial,sans-serif;
@@ -28,13 +28,9 @@
   --f-num:"IBM Plex Mono",ui-monospace,Menlo,monospace;
   --r:10px;
 }
-@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
-  --bg:#0D1412; --surface:#141D1A; --ink:#E7EFEC; --muted:#93A59F; --line:#26332F;
-  --accent:#3FC4A6; --accent-ink:#04211A; --accent-soft:#16312B;
-  --warn:#F0B35F; --warn-soft:#3A2A10; --bad:#FF8C82; --bad-soft:#3F1B18; --good:#6FD9A0; --good-soft:#133524; color-scheme:dark}}
 :root[data-theme="dark"]{
-  --bg:#0D1412; --surface:#141D1A; --ink:#E7EFEC; --muted:#93A59F; --line:#26332F;
-  --accent:#3FC4A6; --accent-ink:#04211A; --accent-soft:#16312B;
+  --bg:#0C131B; --surface:#131C26; --ink:#E6EEF6; --muted:#93A6B8; --line:#25323F;
+  --accent:#7CC4F2; --accent-ink:#08233A; --accent-soft:#12293A; --accent-fg:#8FD0FA;
   --warn:#F0B35F; --warn-soft:#3A2A10; --bad:#FF8C82; --bad-soft:#3F1B18; --good:#6FD9A0; --good-soft:#133524; color-scheme:dark}
 body{background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:15px;line-height:1.45;padding-inline:16px}
 *{box-sizing:border-box}
@@ -73,7 +69,7 @@ button{cursor:pointer}
 .cl b{display:block;font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .cl span{color:var(--muted);font-size:13px}
 .amt{font-family:var(--f-num);font-variant-numeric:tabular-nums;text-align:right;white-space:nowrap}
-.pill{font-size:12px;font-weight:600;padding:3px 9px;border-radius:99px;background:var(--accent-soft);color:var(--accent);white-space:nowrap}
+.pill{font-size:12px;font-weight:600;padding:3px 9px;border-radius:99px;background:var(--accent-soft);color:var(--accent-fg);white-space:nowrap}
 .pill.warn{background:var(--warn-soft);color:var(--warn)}
 .pill.bad{background:var(--bad-soft);color:var(--bad)}
 .pill.good{background:var(--good-soft);color:var(--good)}
@@ -95,38 +91,50 @@ h3{font-size:16px;margin-bottom:10px}
 .tot .big{font-size:17px;font-weight:500;border-top:1px solid var(--line);padding-top:8px}
 .stack{display:flex;flex-direction:column;gap:16px}
 .back{margin-bottom:12px}
-.paper{background:var(--paper);color:var(--paper-ink);width:100%;max-width:794px;margin:0 auto;padding:40px 44px 48px;border-radius:4px;border:1px solid var(--paper-line);min-width:600px;font-family:Arial,"Helvetica Neue",Helvetica,sans-serif}
-.paper .pc{text-align:center}
-.paper .plogo{max-height:78px;max-width:260px}
-.paper .pname{font-size:26px;font-weight:700}
-.paper .paddr{margin-top:14px;font-size:14px;text-transform:uppercase;letter-spacing:.01em}
-.paper .pcon{font-size:12.5px;color:#444;margin-top:2px}
-.paper .ptop{display:flex;justify-content:space-between;gap:24px;margin-top:20px}
-.paper .ptitle{font-size:52px;font-weight:800;line-height:1;text-transform:uppercase;letter-spacing:-.01em}
-.paper .pmeta{margin-top:20px;font-size:14.5px;line-height:1.6}
-.paper .pr{width:44%}
-.paper .pbar{background:#4f4f4f;color:#fff;padding:9px 16px;font-size:15px}
-.paper .pcl{padding:14px 16px 0;font-size:20px;font-weight:700;text-align:right}
-.paper .pcl small{display:block;font-size:12.5px;font-weight:400;color:#444;margin-top:3px}
-.paper table{width:100%;border-collapse:collapse;margin-top:46px}
-.paper th{background:#222;color:#fff;font-size:13px;font-weight:700;text-align:left;padding:9px 10px;text-transform:uppercase}
-.paper td{padding:12px 10px;font-size:14px;vertical-align:top;text-align:left;border:0;font-family:inherit}
-.paper tbody tr:nth-child(even) td{background:#f5f5f5}
+.paperbox{overflow-x:auto;padding-bottom:6px}
+.paper{background:var(--paper);color:var(--pi);width:100%;max-width:794px;margin:0 auto;padding:34px 40px 0;border-radius:4px;border:1px solid var(--paper-line);min-width:620px;font-family:"Helvetica Neue",Helvetica,Arial,sans-serif;overflow:hidden}
+.paper .phd{display:flex;justify-content:space-between;align-items:flex-start;gap:20px;padding-bottom:16px;border-bottom:3px solid var(--pb)}
+.paper .plg img{max-height:74px;max-width:230px;display:block}
+.paper .pname{font-size:26px;font-weight:800}
+.paper .pbiz{text-align:right;display:flex;flex-direction:column;gap:2px;font-size:12.5px;color:#5c6166}
+.paper .pbiz b{font-size:17px;color:var(--pi);margin-bottom:3px}
+.paper .ptr{display:flex;justify-content:space-between;align-items:center;margin-top:24px}
+.paper h2{font-family:inherit;font-size:34px;font-weight:800;letter-spacing:.01em;text-transform:uppercase}
+.paper .pstamp{border:2px solid #2e7d1b;color:#2e7d1b;font-weight:800;letter-spacing:.1em;padding:3px 12px;border-radius:5px;font-size:14px}
+.paper .pcols{display:flex;justify-content:space-between;gap:24px;margin-top:18px}
+.paper .plab{font-size:11px;letter-spacing:.09em;text-transform:uppercase;color:#5c6166;font-weight:700}
+.paper .pcname{font-size:19px;font-weight:700;margin-top:5px}
+.paper .pcsub{font-size:13px;color:#5c6166;margin-top:3px;line-height:1.5}
+.paper .pmeta{min-width:230px;font-size:13px}
+.paper .pmeta div{display:flex;justify-content:space-between;gap:16px;padding:2px 0}
+.paper .pmeta span{color:#5c6166}
+.paper table{width:100%;border-collapse:collapse;margin-top:26px}
+.paper th{background:var(--pb);color:var(--pbi);font-size:11.5px;font-weight:700;text-align:left;padding:10px 10px;letter-spacing:.07em;text-transform:uppercase}
+.paper td{padding:12px 10px;font-size:13.5px;vertical-align:top;text-align:left;border-bottom:1px solid #d9dde0}
+.paper td:nth-child(3){color:#5c6166}
+.paper th.n,.paper td.n{width:36px}
 .paper th.r,.paper td.r{text-align:right;white-space:nowrap}
-.paper .pfoot{display:flex;justify-content:space-between;align-items:center;margin-top:30px;font-weight:700;font-size:14.5px;padding:0 14px 0 0}
-.paper .pfoot .psub{display:flex;gap:70px}
-.paper .prow{display:flex;justify-content:flex-end;gap:60px;margin-top:8px;padding-right:14px;font-size:14px}
-.paper .ptotal{display:flex;justify-content:space-between;background:#222;color:#fff;font-weight:700;font-size:15px;padding:13px 14px 13px 40px;margin:24px 0 0 auto;width:52%}
-.paper .pgreen,.paper .porange{display:flex;justify-content:flex-end;gap:60px;font-weight:700;font-size:15px;margin-top:10px;padding-right:14px}
-.paper .pgreen{color:#2e7d1b}.paper .porange{color:#f0922b}
-.paper .pbot{display:flex;justify-content:space-between;gap:30px;margin-top:34px}
-.paper .pbot h4{font-size:20px;margin:0 0 12px;font-weight:700}
-.paper .pbot p{margin:0;font-size:14px;line-height:1.7;white-space:pre-wrap}
-.paper .pbot .small{font-size:12.5px;line-height:1.55}
-.paper .psig{text-align:center;min-width:180px;align-self:flex-end}
-.paper .psig img{max-height:80px;max-width:200px;display:block;margin:0 auto 6px}
-.paper .psig b{font-size:14.5px}
-.paper .pstamp{display:inline-block;border:3px solid #2e7d1b;color:#2e7d1b;font-weight:800;letter-spacing:.12em;padding:2px 14px;border-radius:4px;transform:rotate(-5deg);margin-top:16px;font-size:20px}
+.paper .pmid{display:flex;justify-content:space-between;gap:24px;margin-top:22px;align-items:flex-start}
+.paper .pthanks{font-weight:700;font-size:14px;padding-top:6px}
+.paper .ptots{width:min(340px,100%);display:flex;flex-direction:column;gap:7px}
+.paper .ptots div{display:flex;justify-content:space-between;gap:16px;font-size:13.5px}
+.paper .ptots .tt-bar{background:var(--pb);color:var(--pbi);font-weight:700;font-size:15px;padding:11px 12px}
+.paper .ptots .tt-green{color:#2e7d1b;font-weight:700}
+.paper .ptots .tt-orange{color:#e17d14;font-weight:700}
+.paper .pbot{display:flex;justify-content:space-between;gap:30px;margin-top:30px;align-items:flex-end}
+.paper .pbl{flex:1;min-width:0}
+.paper .pbl h4{font-size:11px;letter-spacing:.09em;text-transform:uppercase;color:#5c6166;margin:18px 0 6px}
+.paper .pbl h4:first-child{margin-top:0}
+.paper .pbl p{margin:0 0 3px;font-size:13.5px;font-weight:700}
+.paper .pbl p span{font-weight:400;color:#5c6166;display:inline-block;min-width:118px}
+.paper .pbl p.pt{font-weight:400;white-space:pre-wrap;line-height:1.55}
+.paper .pbl p.sm{font-size:12px;color:#5c6166}
+.paper .psig{width:210px;text-align:center;flex:none}
+.paper .psig img{max-height:70px;max-width:190px;display:block;margin:0 auto 4px}
+.paper .psig .gap{height:54px}
+.paper .psig .sl{border-top:1.5px solid var(--pi);margin-bottom:6px}
+.paper .psig b{font-size:13px}
+.paper .pband{background:var(--pb);color:var(--pbi);text-align:center;font-weight:800;letter-spacing:.14em;text-transform:uppercase;font-size:15px;padding:16px 10px;margin:34px -40px 0}
 .toast{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(20px + env(safe-area-inset-bottom,0px));background:var(--ink);color:var(--bg);padding:10px 16px;border-radius:99px;font-weight:500;z-index:9}
 .hint{color:var(--muted);font-size:13px}
 @media (max-width:640px){
@@ -150,6 +158,21 @@ details>summary{cursor:pointer;font-weight:600;font-family:var(--f-display)}
 @media (max-width:640px){.rowc{grid-template-columns:1fr;gap:8px}}
 
 .login{max-width:420px;margin:7vh auto 0}
+.item.acct{grid-template-columns:90px 1fr auto auto}
+.clbtn{border:0;background:transparent;text-align:left;padding:0;cursor:pointer;min-width:0}
+.clbtn:hover b{text-decoration:underline}
+.cstat b{font-family:var(--f-num);font-weight:500;color:var(--ink)}
+.brow{display:grid;grid-template-columns:minmax(80px,1fr) 1.2fr auto;gap:10px;align-items:center;padding:5px 0;font-size:13.5px}
+.brow .bk{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.brow .bt{height:8px;background:var(--line);border-radius:99px;overflow:hidden}
+.brow .bt i{display:block;height:100%;background:var(--accent);border-radius:99px}
+.brow .bv{font-family:var(--f-num);font-variant-numeric:tabular-nums;white-space:nowrap}
+label.inl{flex-direction:row;align-items:center;gap:8px}
+label.inl input{width:auto}
+@media (max-width:640px){.item.acct{grid-template-columns:1fr auto;grid-template-areas:"cl amt" "num pill"}.item.acct .num{grid-area:num}.item.acct .cl{grid-area:cl}.item.acct .amt{grid-area:amt}.item.acct .pill{grid-area:pill;justify-self:end}}
+.logo{display:flex;align-items:center;gap:10px}
+.logo h1{color:var(--accent-fg)}
+.brand .logo .mark,.logo .mark{display:grid;place-items:center;width:34px;height:34px;border-radius:9px;background:var(--accent);color:var(--accent-ink);font-family:var(--f-display);font-weight:700;font-size:21px;line-height:1}
 </style>
 
 <div class="wrap" id="app"></div>
@@ -164,7 +187,7 @@ details>summary{cursor:pointer;font-weight:600;font-family:var(--f-display)}
 const TYPES={quote:{label:"Quote",title:"Quotation",pre:"QT-"},invoice:{label:"Invoice",title:"Invoice",pre:"INV-"},receipt:{label:"Receipt",title:"Receipt",pre:"RC-"}};
 const PAY=["Mobile Money (MoMo)","Cash","Bank","Other"];
 const CURRENCIES=["UGX","KES","TZS","RWF","USD","EUR","GBP"];
-const S={docs:[],clients:[],services:[],settings:{name:"Sonart Images",phone:"",email:"sonartphotos@gmail.com",address:"Uganda",currency:"UGX",payInfo:"",terms:"Quote valid for 14 days. A 50% deposit confirms the booking."},view:"list",tab:"all",q:"",cur:null,edit:null,ce:null,se:null,user:"",mode:"in",msg:""};
+const S={docs:[],clients:[],services:[],settings:{name:"Sonart Images",phone:"",email:"sonartphotos@gmail.com",address:"Uganda",currency:"UGX",payInfo:"",momoNumber:"",momoName:"",bankName:"",bankAcc:"",bankAccName:"",tagline:"",brand:"#111113",terms:"Quote valid for 14 days. A 50% deposit confirms the booking."},view:"list",tab:"all",q:"",cur:null,edit:null,ce:null,se:null,cc:null,rng:{preset:"month",from:"",to:""},user:"",mode:"in",msg:""};
 let DB=null;const LS="sonart-billing-v1";
 const CFG=(typeof window!=="undefined"&&window.BITABO_CONFIG)||{};
 const CLOUD=!!(CFG.SUPABASE_URL&&CFG.SUPABASE_ANON_KEY&&window.supabase);
@@ -204,7 +227,11 @@ function statusOf(d){
   if(d.type==="invoice")return invStatus(d);
   const m={draft:["Draft","mute"],sent:["Sent",""],accepted:["Accepted","good"],declined:["Declined","bad"]};return m[d.status||"draft"];
 }
-function nextNumber(type){const pre=TYPES[type].pre;let max=0;S.docs.filter(d=>d.type===type).forEach(d=>{const n=parseInt(String(d.number).replace(/\D/g,""),10);if(n>max)max=n});return pre+String(max+1).padStart(4,"0")}
+function nextNumber(type){const pre=TYPES[type].pre;let max=num((S.settings.counters||{})[type]);S.docs.filter(d=>d.type===type).forEach(d=>{const n=parseInt(String(d.number).replace(/\D/g,""),10);if(n>max)max=n});return pre+String(max+1).padStart(4,"0")}
+async function bumpCounter(d){
+  const n=parseInt(String(d.number).replace(/\D/g,""),10)||0,c=Object.assign({},S.settings.counters||{});
+  if(n>num(c[d.type])){c[d.type]=n;S.settings.counters=c;await saveSettings()}
+}
 function methodText(d){return d.methodSel==="Other"?(d.methodOther||"Other"):(d.methodSel||d.method||"")}
 function blank(type,over){
   const b={id:uid(),type,number:nextNumber(type),date:today(),due:type==="receipt"?"":addDays(today(),14),client:{name:"",phone:"",email:"",address:""},items:[{d:"",n:"",q:1,p:0}],taxRate:0,notes:"",terms:S.settings.terms||"",status:"draft",createdAt:Date.now()};
@@ -227,12 +254,12 @@ async function rememberService(name,price,desc){
 function render(){
   const a=$("#app");
   const v=S.view;
-  a.innerHTML=v==="login"?loginHTML():v==="edit"?(S.edit.type==="receipt"?receiptEditorHTML():editorHTML()):v==="view"?viewHTML():v==="settings"?settingsHTML():v==="clients"?clientsHTML():v==="services"?servicesHTML():listHTML();
+  a.innerHTML=v==="login"?loginHTML():v==="client"?clientDetailHTML():v==="totals"?reportHTML():v==="edit"?(S.edit.type==="receipt"?receiptEditorHTML():editorHTML()):v==="view"?viewHTML():v==="settings"?settingsHTML():v==="clients"?clientsHTML():v==="services"?servicesHTML():listHTML();
   if(v==="edit"&&S.edit.type==="receipt")updateRecSummary();
 }
 function topHTML(){
-  const nav=[["list","Documents"],["clients","Clients"],["services","Services"]].map(([k,l])=>`<button data-a="nav" data-t="${k}" aria-pressed="${S.view===k}">${l}</button>`).join("");
-  return `<div class="top"><div class="brand"><h1>Bitabo</h1><span>${esc(S.settings.name||"Your business")} · Quotes, invoices and receipts</span></div>
+  const nav=[["list","Documents"],["clients","Clients"],["services","Services"],["totals","Totals"]].map(([k,l])=>`<button data-a="nav" data-t="${k}" aria-pressed="${S.view===k||(k==="clients"&&S.view==="client")}">${l}</button>`).join("");
+  return `<div class="top"><div class="brand"><div class="logo"><span class="mark" aria-hidden="true">B</span><h1>Bitabo</h1></div><span>${esc(S.settings.name||"Your business")} · Quotes, invoices and receipts</span></div>
   <div class="row"><button class="btn primary" data-a="new" data-t="receipt">New receipt</button>
   <button class="btn" data-a="new" data-t="invoice">New invoice</button>
   <button class="btn" data-a="new" data-t="quote">New quote</button>
@@ -267,52 +294,93 @@ function totalsHTML(d,extra){
   ${num(d.taxRate)?`<div><span>Tax ${num(d.taxRate)}%</span><span>${money(c.tax)}</span></div>`:""}
   <div class="big"><span>Total</span><span>${money(c.total)}</span></div>${extra||""}</div>`;
 }
+/* One template for every document. docParts() decides WHAT is shown; paperHTML() and makePDF() only draw it. */
+function hexRGB(h){const m=/^#?([0-9a-f]{6})$/i.exec(h||"");const n=parseInt(m?m[1]:"111113",16);return[n>>16&255,n>>8&255,n&255]}
+function brandColors(){
+  const b=hexRGB(S.settings.brand),ink=b.map(v=>Math.round(v*0.18)),lum=(0.2126*b[0]+0.7152*b[1]+0.0722*b[2])/255;
+  return{b,ink,on:lum>0.55?ink:[255,255,255]};
+}
+const rgbCss=c=>"rgb("+c.join(",")+")";
+function payLines(st){
+  const L=[];
+  if(st.momoNumber)L.push(["Mobile Money",[st.momoNumber,st.momoName].filter(Boolean).join("  ·  ")]);
+  if(st.bankName)L.push(["Bank",st.bankName]);
+  if(st.bankAcc)L.push(["Account number",st.bankAcc]);
+  if(st.bankAccName)L.push(["Account name",st.bankAccName]);
+  return L;
+}
+function docParts(d){
+  const s=S.settings,c=calc(d),T=TYPES[d.type];
+  const src=d.sourceId?S.docs.find(x=>x.id===d.sourceId):null;
+  const P={title:T.title,toLabel:d.type==="receipt"?"Received from":d.type==="quote"?"Prepared for":"Billed to",
+    client:d.client,rows:[],totals:[],meta:[],pay:{head:"Payment details",lines:[],text:""},notes:d.notes||"",terms:"",stamp:"",thanks:"Thank you for your business"};
+  P.meta.push([T.label+" no.",d.number],["Date",d.date]);
+  if(d.due&&d.type!=="receipt")P.meta.push([d.type==="quote"?"Valid until":"Due date",d.due]);
+  if(src)P.meta.push(["For",src.number]);
+  if(d.type==="receipt"){
+    const i=recInfo(d),shown=i.price>0?i.price:i.paid;
+    P.rows=[{d:recService(d),n:"",q:1,p:shown}];
+    if(i.price>0)P.totals.push({k:"Full price",v:money(i.price),t:"plain"});
+    if(i.prev>0)P.totals.push({k:"Already paid",v:money(i.prev),t:"plain"});
+    P.totals.push({k:"Amount paid today",v:money(i.paid),t:"bar"},{k:"Total amount paid",v:money(i.total),t:"green"});
+    if(i.bal!==null)P.totals.push({k:"Balance due",v:money(i.bal),t:"orange"});
+    if(i.bal===0)P.stamp="PAID IN FULL";
+    P.pay={head:"Payment received",lines:[["Paid by",methodText(d)],...(d.ref?[["Reference",d.ref]]:[])],text:""};
+  }else{
+    P.rows=d.items.filter(l=>l.d||l.n||num(l.p));
+    P.totals.push({k:"Subtotal",v:money(c.sub),t:"plain"});
+    if(num(d.taxRate))P.totals.push({k:"Tax "+num(d.taxRate)+"%",v:money(c.tax),t:"plain"});
+    P.totals.push({k:"Total",v:money(c.total),t:"bar"});
+    if(d.type==="invoice"){
+      const rec=S.docs.filter(r=>r.type==="receipt"&&r.sourceId===d.id).sort((a,b)=>(b.createdAt||0)-(a.createdAt||0));
+      const p=paidOf(d);
+      const D=rec.length?rec.map(r=>r.date).sort().pop():"";
+      const amt=rec.filter(r=>r.date===D).reduce((a,r)=>a+recPaid(r),0);
+      P.totals.push({k:!D||D===today()?"Amount paid today":"Amount paid ("+D+")",v:money(amt),t:"plain"});
+      P.totals.push({k:"Total amount paid",v:money(p),t:"green"},{k:"Balance due",v:money(Math.max(0,c.total-p)),t:"orange"});
+      if(c.total>0&&c.total-p<=0)P.stamp="PAID";
+    }
+    P.pay={head:"Payment details",lines:payLines(s),text:s.payInfo||""};
+    P.terms=d.terms||"";
+  }
+  return P;
+}
+function paperHTML(d){
+  const p=docParts(d),s=S.settings;
+  const contact=[s.phone?"Tel: "+esc(s.phone):"",s.address?"Located: "+esc(s.address):"",s.email?"Email: "+esc(s.email):""].filter(Boolean);
+  const cs=[p.client.phone,p.client.email,p.client.address].filter(Boolean).map(esc).join("<br>");
+  const payBlock=(p.pay.lines.length||p.pay.text)?`<h4>${p.pay.head}</h4>${p.pay.lines.map(l=>`<p><span>${esc(l[0])}</span> ${esc(l[1])}</p>`).join("")}${p.pay.text?`<p class="pt">${esc(p.pay.text)}</p>`:""}`:"";
+  const bc=brandColors();
+  return `<div class="paper" style="--pb:${rgbCss(bc.b)};--pbi:${rgbCss(bc.on)};--pi:${rgbCss(bc.ink)}">
+   <div class="phd"><div class="plg">${s.logo?`<img src="${s.logo}" alt="">`:`<div class="pname">${esc(s.name)}</div>`}</div>
+    <div class="pbiz">${s.logo?`<b>${esc(s.name)}</b>`:""}${contact.map(c=>`<span>${c}</span>`).join("")}</div></div>
+   <div class="ptr"><h2>${p.title}</h2>${p.stamp?`<span class="pstamp">${p.stamp}</span>`:""}</div>
+   <div class="pcols"><div><div class="plab">${p.toLabel}</div><div class="pcname">${esc(p.client.name||"-")}</div>${cs?`<div class="pcsub">${cs}</div>`:""}</div>
+    <div class="pmeta">${p.meta.map(m=>`<div><span>${esc(m[0])}</span><b>${esc(m[1])}</b></div>`).join("")}</div></div>
+   <table><thead><tr><th class="n">#</th><th>Item</th><th>Description</th><th class="r">Qty</th><th class="r">Price</th><th class="r">Total</th></tr></thead><tbody>
+    ${p.rows.map((l,i)=>`<tr><td class="n">${i+1}</td><td>${esc(l.d)}</td><td>${esc(l.n||"")}</td><td class="r">${num(l.q)}</td><td class="r">${money(l.p)}</td><td class="r">${money(num(l.q)*num(l.p))}</td></tr>`).join("")}</tbody></table>
+   <div class="pmid"><div class="pthanks">${p.thanks}</div><div class="ptots">${p.totals.map(t=>`<div class="tt-${t.t}"><span>${esc(t.k)}</span><span>${t.v}</span></div>`).join("")}</div></div>
+   <div class="pbot"><div class="pbl">${payBlock}${p.notes?`<h4>Notes</h4><p class="pt">${esc(p.notes)}</p>`:""}${p.terms?`<h4>Terms and conditions</h4><p class="pt sm">${esc(p.terms)}</p>`:""}</div>
+    <div class="psig">${s.sig?`<img src="${s.sig}" alt="">`:`<div class="gap"></div>`}<div class="sl"></div><b>Authorized sign</b></div></div>
+   ${s.tagline?`<div class="pband">${esc(s.tagline)}</div>`:""}</div>`;
+}
 function viewHTML(){
   const d=S.docs.find(x=>x.id===S.cur);if(!d){S.view="list";return listHTML()}
-  const [st,cl]=statusOf(d),c=calc(d),s=S.settings;
+  const [st,cl]=statusOf(d);
   let acts="";
   if(d.type==="invoice")acts=`<button class="btn primary" data-a="pay" data-id="${d.id}">Record payment (issue receipt)</button>`;
   if(d.type==="receipt"){const i=recInfo(d);if(i.bal>0)acts=`<button class="btn primary" data-a="more" data-id="${d.id}">Add another payment</button>`}
   if(d.type==="quote")acts=`<button class="btn primary" data-a="toinv" data-id="${d.id}">Convert to invoice</button>
     <select id="qstatus" aria-label="Quote status" style="width:auto">${["draft","sent","accepted","declined"].map(x=>`<option value="${x}" ${(d.status||"draft")===x?"selected":""}>${x[0].toUpperCase()+x.slice(1)}</option>`).join("")}</select>`;
-  const src=d.sourceId?S.docs.find(x=>x.id===d.sourceId):null;
-  const toLbl=d.type==="receipt"?"Received From":d.type==="quote"?"Prepared For":"Invoice To";
-  const T=TYPES[d.type];
-  let rowsHTML,foot="",bal="",pay="",terms="";
-  if(d.type==="receipt"){
-    const i=recInfo(d),shown=i.price>0?i.price:i.paid;
-    rowsHTML=`<tr><td>1</td><td>${esc(recService(d))}</td><td>${esc(d.notes||"")}</td><td class="r">${money(shown)}</td><td class="r">1</td><td class="r">${money(shown)}</td></tr>`;
-    foot=(i.price>0?`<div class="prow"><span>Full price</span><span>${money(i.price)}</span></div>`:"")+(i.prev>0?`<div class="prow"><span>Already paid</span><span>${money(i.prev)}</span></div>`:"");
-    bal=`<div class="ptotal"><span>Paid Today</span><span>${money(i.paid)}</span></div>
-      <div class="pgreen"><span>Total Paid</span><span>${money(i.total)}</span></div>
-      ${i.bal!==null?`<div class="porange"><span>Balance Due</span><span>${money(i.bal)}</span></div>`:""}
-      ${i.bal===0?`<div style="text-align:right"><span class="pstamp">PAID IN FULL</span></div>`:""}`;
-    pay=`<h4>Payment :</h4><p>${esc(methodText(d))}${d.ref?"\nReference : "+esc(d.ref):""}${src?"\nFor : "+esc(src.number):""}</p>`;
-  }else{
-    rowsHTML=d.items.filter(l=>l.d||l.n||num(l.p)).map((l,i)=>`<tr><td>${i+1}</td><td>${esc(l.d)}</td><td>${esc(l.n||"")}</td><td class="r">${money(l.p)}</td><td class="r">${num(l.q)}</td><td class="r">${money(num(l.q)*num(l.p))}</td></tr>`).join("");
-    foot=`<div class="pfoot"><span>Thank you for your business</span><span class="psub"><span>Sub total</span><span>${money(c.sub)}</span></span></div>`+(num(d.taxRate)?`<div class="prow"><span>Tax ${num(d.taxRate)}%</span><span>${money(c.tax)}</span></div>`:"");
-    bal=`<div class="ptotal"><span>Total</span><span>${money(c.total)}</span></div>`;
-    if(d.type==="invoice"){const p=paidOf(d);bal+=`<div class="pgreen"><span>Amount Paid</span><span>${money(p)}</span></div><div class="porange"><span>Balance Due</span><span>${money(c.total-p)}</span></div>`+(c.total>0&&c.total-p<=0?`<div style="text-align:right"><span class="pstamp">PAID</span></div>`:"")}
-    pay=(s.payInfo?`<h4>Payment Info :</h4><p>${esc(s.payInfo)}</p>`:"")+(d.notes?`<p style="margin-top:12px">${esc(d.notes)}</p>`:"");
-    terms=d.terms?`<h4 style="margin-top:26px">Terms and Condition</h4><p class="small">${esc(d.terms)}</p>`:"";
-  }
-  if(d.type==="receipt"&&false)foot="";
-  const paper=`<div class="paper"><div class="pc">${s.logo?`<img class="plogo" src="${s.logo}" alt="">`:`<div class="pname">${esc(s.name)}</div>`}
-    <div class="paddr">${esc(s.address)}</div>${s.phone||s.email?`<div class="pcon">${[s.phone,s.email].filter(Boolean).map(esc).join(" · ")}</div>`:""}</div>
-    <div class="ptop"><div><div class="ptitle">${T.title}</div><div class="pmeta">${T.label} #${esc(d.number)}<br>Date : ${esc(d.date)}${d.due&&d.type!=="receipt"?`<br>${d.type==="quote"?"Valid until":"Due"} : ${esc(d.due)}`:""}</div></div>
-    <div class="pr"><div class="pbar">${toLbl} :</div><div class="pcl">${esc(d.client.name||"-")}${[d.client.phone,d.client.email,d.client.address].filter(Boolean).length?`<small>${[d.client.phone,d.client.email,d.client.address].filter(Boolean).map(esc).join("<br>")}</small>`:""}</div></div></div>
-    <table><thead><tr><th style="width:44px">SL.</th><th>Item</th><th>Description</th><th class="r">Price</th><th class="r" style="width:50px">Qty.</th><th class="r">Total</th></tr></thead><tbody>${rowsHTML}</tbody></table>
-    ${foot}${bal}
-    <div class="pbot"><div style="flex:1;min-width:0">${pay}${terms}</div>${s.sig?`<div class="psig"><img src="${s.sig}" alt=""><b>Authorized Sign</b></div>`:""}</div></div>`;
   return `<button class="btn back" data-a="list">‹ All documents</button>
   <div class="row" style="margin-bottom:14px;justify-content:space-between"><div class="row"><h2>${esc(d.number)}</h2><span class="pill ${cl}">${esc(st)}</span></div>
   <div class="row">${acts}<button class="btn" data-a="pdf" data-id="${d.id}">Download PDF</button><button class="btn" data-a="copy" data-id="${d.id}">Copy for WhatsApp</button><button class="btn" data-a="edit" data-id="${d.id}">Edit</button><button class="btn danger" data-a="del" data-id="${d.id}">Delete</button></div></div>
-  <div class="paperbox">${paper}</div>`;
+  <div class="paperbox">${paperHTML(d)}</div>`;
 }
 function clientFields(d){
   return `<div class="grid2">
-   <label>Client name<input id="cname" value="${esc(d.client.name)}" autocomplete="off" list="clients" placeholder="e.g. Maria Bimazire"></label>
-   <label>Phone<input id="cphone" value="${esc(d.client.phone)}" inputmode="tel" placeholder="e.g. 0772 123456"></label>
+   <label>Client name<input id="cname" value="${esc(d.client.name)}" autocomplete="off" list="clients" placeholder="e.g. Nakimbugwe Zubedah"></label>
+   <label>Phone<input id="cphone" value="${esc(d.client.phone)}" inputmode="tel" placeholder="07********"></label>
    <label>Email<input id="cemail" value="${esc(d.client.email)}" inputmode="email" placeholder="name@email.com"></label>
    <label>Address<input id="caddr" value="${esc(d.client.address)}" placeholder="e.g. Kireka, Kampala"></label></div>
    <datalist id="clients">${S.clients.map(c=>`<option value="${esc(c.name)}">`).join("")}</datalist>`;
@@ -330,8 +398,12 @@ function editorHTML(){
    <div class="row" style="margin-top:10px"><button type="button" class="btn small" data-a="addline">Add line</button><span class="hint">Pick a saved service to fill its price.</span></div>
    <div class="grid2" style="margin-top:14px"><label>Tax %<input id="taxRate" type="number" min="0" step="any" value="${num(d.taxRate)||""}" placeholder="0 (leave empty for no tax)"></label></div>
    <div id="totals">${totalsHTML(d,"")}</div></div>
+  ${t==="invoice"?`<div class="panel"><h3>Amount paid today</h3><p class="hint" style="margin:0 0 10px">Optional. If the client pays something now, add it here and Bitabo records the payment and makes the receipt.</p><div class="grid2">
+   <label>Amount paid today<input id="payToday" type="number" min="0" step="any" value="${num(d._pt)||""}" placeholder="e.g. 500,000"></label>
+   <label>Paid by<select id="ptMethod">${PAY.map(m=>`<option ${(d._ptm||PAY[0])===m?"selected":""}>${m}</option>`).join("")}</select></label>
+   <label id="ptOtherWrap" ${d._ptm==="Other"?"":"hidden"}>Other payment method<input id="ptOther" value="${esc(d._pto||"")}" placeholder="e.g. Cheque, Card, PayPal"></label></div></div>`:""}
   <div class="panel"><h3>Details</h3><div class="grid2">
-   <label>Number<input id="number" value="${esc(d.number)}" placeholder="e.g. ${TYPES[t].pre}0001"></label>
+   <label>Number (automatic)<input id="number" value="${esc(d.number)}" readonly style="opacity:.75"></label>
    <label>Date<input id="date" type="date" value="${esc(d.date)}"></label>
    <label>${t==="quote"?"Valid until":"Due date"}<input id="due" type="date" value="${esc(d.due)}"></label></div></div>
   <div class="panel"><h3>Notes</h3><div class="stack"><label>Notes shown on the document<textarea id="notes" placeholder="Anything the client should know, e.g. venue, event date">${esc(d.notes)}</textarea></label>
@@ -344,7 +416,7 @@ function receiptEditorHTML(){
   return `<button class="btn back" data-a="${exists?"open":"list"}" data-id="${d.id}">‹ Cancel</button>
   <form id="f" class="stack"><h2>${exists?"Edit receipt":"New receipt"}</h2>
   <div class="panel"><h3>Who paid and for what</h3><div class="grid2">
-   <label>Client name<input id="cname" value="${esc(d.client.name)}" autocomplete="off" list="clients" placeholder="e.g. Maria Bimazire"></label>
+   <label>Client name<input id="cname" value="${esc(d.client.name)}" autocomplete="off" list="clients" placeholder="e.g. Nakimbugwe Zubedah"></label>
    <label>Service or item paid for<input id="service" value="${esc(d.service||"")}" autocomplete="off" list="known" placeholder="e.g. Wedding photography"></label>
    <label>Full price of this service (optional)<input id="price" type="number" min="0" step="any" value="${num(d.price)||""}" placeholder="e.g. 2,850,000 (used to work out the balance)"></label>
    <label>Amount paid today<input id="paid" type="number" min="0" step="any" value="${num(d.paid)||""}" placeholder="e.g. 500,000"></label></div>
@@ -358,10 +430,10 @@ function receiptEditorHTML(){
    <label>Date<input id="date" type="date" value="${esc(d.date)}"></label></div></div>
   <div class="panel"><details ${d.client.phone||d.client.email||d.client.address||d.notes?"open":""}><summary>More details (phone, email, note)</summary><div class="stack" style="margin-top:12px">
    <div class="grid2">
-    <label>Phone<input id="cphone" value="${esc(d.client.phone)}" inputmode="tel" placeholder="e.g. 0772 123456"></label>
+    <label>Phone<input id="cphone" value="${esc(d.client.phone)}" inputmode="tel" placeholder="07********"></label>
     <label>Email<input id="cemail" value="${esc(d.client.email)}" inputmode="email" placeholder="name@email.com"></label>
     <label>Address<input id="caddr" value="${esc(d.client.address)}" placeholder="e.g. Kireka, Kampala"></label>
-    <label>Receipt number<input id="number" value="${esc(d.number)}" placeholder="e.g. RC-0001"></label></div>
+    <label>Receipt number (automatic)<input id="number" value="${esc(d.number)}" readonly style="opacity:.75"></label></div>
    <label>Note on the receipt<textarea id="notes" placeholder="e.g. Deposit for the wedding on 20 December">${esc(d.notes)}</textarea></label></div></details></div>
   <div class="row"><button class="btn primary" type="submit">Save receipt</button></div></form>`;
 }
@@ -377,7 +449,7 @@ function updateRecSummary(){
 }
 function loginHTML(){
   const up=S.mode==="up";
-  return `<div class="login"><div class="brand" style="margin-bottom:18px"><h1>Bitabo</h1><span>Quotes, invoices and receipts</span></div>
+  return `<div class="login"><div class="brand" style="margin-bottom:18px"><div class="logo"><span class="mark" aria-hidden="true">B</span><h1>Bitabo</h1></div><span>Quotes, invoices and receipts</span></div>
   <form id="lf" class="panel stack"><h2>${up?"Create your account":"Sign in"}</h2>
    <label>Email<input id="l_email" type="email" autocomplete="email" inputmode="email" placeholder="you@email.com" required></label>
    <label>Password<input id="l_pass" type="password" autocomplete="${up?"new-password":"current-password"}" placeholder="${up?"At least 6 characters":"Your password"}" minlength="6" required></label>
@@ -386,16 +458,88 @@ function loginHTML(){
    <button type="button" class="btn ghost" data-a="lg-mode">${up?"I already have an account":"Create an account"}</button></div>
    <p class="hint" style="margin:0">Your quotes, invoices, receipts, clients and services are saved to your account, so you see the same data on your phone and your computer.</p></form></div>`;
 }
+
+/* ---------- clients: balances and detail ---------- */
+function acctsFor(name){
+  const n=norm(name),A=[];
+  const invs=S.docs.filter(d=>d.type==="invoice"&&norm(d.client.name)===n);
+  invs.forEach(i=>{const price=calc(i).total,paid=paidOf(i);A.push({label:i.number+(i.items[0]&&i.items[0].d?" · "+i.items[0].d:""),kind:"Invoice",price,paid,bal:Math.max(0,price-paid),open:i.id})});
+  const g={};
+  S.docs.filter(r=>r.type==="receipt"&&norm(r.client.name)===n&&!(r.sourceId&&invs.some(i=>i.id===r.sourceId))).forEach(r=>{(g[recKey(r)]=g[recKey(r)]||[]).push(r)});
+  Object.values(g).forEach(list=>{
+    list.sort((a,b)=>(a.createdAt||0)-(b.createdAt||0));const last=list[list.length-1];
+    const paid=list.reduce((a,r)=>a+recPaid(r),0),price=Math.max(0,...list.map(r=>num(r.price)));
+    A.push({label:recService(last),kind:"Receipts",price,paid,bal:price>0?Math.max(0,price-paid):null,open:last.id});
+  });
+  return A;
+}
+function clientTotals(name){
+  const A=acctsFor(name);
+  return{A,billed:A.reduce((a,x)=>a+x.price,0),paid:A.reduce((a,x)=>a+x.paid,0),bal:A.reduce((a,x)=>a+(x.bal||0),0),docs:S.docs.filter(d=>norm(d.client.name)===norm(name))};
+}
+function docRowHTML(d){
+  const [st,cl]=statusOf(d);const amt=d.type==="receipt"?recPaid(d):calc(d).total;
+  return `<button class="item" data-a="open" data-id="${d.id}">
+    <span class="num">${esc(d.number)}<br>${esc(TYPES[d.type].label)}</span>
+    <span class="cl"><b>${esc(d.type==="receipt"&&recService(d)?recService(d):d.client.name||"No client name")}</b><span>${esc(d.date)}${d.type==="invoice"&&d.due?" · due "+esc(d.due):""}</span></span>
+    <span class="amt">${money(amt)}</span><span class="pill ${cl}">${esc(st)}</span></button>`;
+}
+function clientDetailHTML(){
+  const c=S.clients.find(x=>x.id===S.cc);if(!c){S.view="clients";return clientsHTML()}
+  const T=clientTotals(c.name);
+  const accts=T.A.map(a=>`<button class="item acct" data-a="open" data-id="${a.open}">
+    <span class="num">${esc(a.kind)}</span><span class="cl"><b>${esc(a.label)}</b><span>${a.price>0?"Price "+money(a.price):"No price set"}</span></span>
+    <span class="amt">Paid ${money(a.paid)}</span><span class="pill ${a.bal===null?"mute":a.bal>0?"warn":"good"}">${a.bal===null?"No balance set":a.bal>0?"Balance "+money(a.bal):"Paid in full"}</span></button>`).join("");
+  const docs=T.docs.slice().sort((a,b)=>(b.createdAt||0)-(a.createdAt||0)).map(docRowHTML).join("");
+  return topHTML()+`<button class="btn back" data-a="nav" data-t="clients">‹ All clients</button>
+  <div class="row" style="justify-content:space-between;margin-bottom:14px"><div><h2>${esc(c.name)}</h2><span class="hint">${[c.phone,c.email,c.address].filter(Boolean).map(esc).join(" · ")||"No contact details"}</span></div>
+   <div class="row"><button class="btn primary" data-a="cl-rec" data-id="${c.id}">New receipt</button><button class="btn" data-a="cl-inv" data-id="${c.id}">New invoice</button><button class="btn" data-a="cl-quo" data-id="${c.id}">New quote</button><button class="btn" data-a="cl-edit" data-id="${c.id}">Edit</button></div></div>
+  <div class="sum"><div><small>Total billed</small><b>${money(T.billed)}</b></div><div><small>Total paid</small><b style="color:var(--good)">${money(T.paid)}</b></div><div class="${T.bal>0?"over":""}"><small>Balance</small><b>${money(T.bal)}</b></div><div><small>Documents</small><b>${T.docs.length}</b></div></div>
+  <h3>What they owe and have paid</h3>
+  <div class="list" style="margin-bottom:18px">${accts||`<div class="empty"><p>No invoices or receipts for this client yet.</p></div>`}</div>
+  <h3>All documents</h3>
+  <div class="list">${docs||`<div class="empty"><p>No documents yet.</p></div>`}</div>`;
+}
+
+/* ---------- totals: money that has gone through the app ---------- */
+function rangeDates(){
+  const r=S.rng,t=new Date(),iso=x=>x.toISOString().slice(0,10),y=t.getFullYear(),m=t.getMonth();
+  if(r.preset==="month")return[iso(new Date(Date.UTC(y,m,1))),iso(new Date(Date.UTC(y,m+1,0)))];
+  if(r.preset==="30")return[addDays(today(),-29),today()];
+  if(r.preset==="year")return[y+"-01-01",y+"-12-31"];
+  if(r.preset==="custom")return[r.from||"0000-01-01",r.to||"9999-12-31"];
+  return["0000-01-01","9999-12-31"];
+}
+function reportHTML(){
+  const [from,to]=rangeDates(),inR=d=>(d.date||"")>=from&&(d.date||"")<=to;
+  const recs=S.docs.filter(d=>d.type==="receipt"&&inR(d)),invs=S.docs.filter(d=>d.type==="invoice"&&inR(d)),qs=S.docs.filter(d=>d.type==="quote"&&inR(d));
+  const received=recs.reduce((a,r)=>a+recPaid(r),0);
+  const invoiced=invs.reduce((a,d)=>a+calc(d).total,0);
+  const owed=invs.reduce((a,d)=>a+Math.max(0,calc(d).total-paidOf(d)),0);
+  const quoted=qs.reduce((a,d)=>a+calc(d).total,0);
+  const by=(fn)=>{const m={};recs.forEach(r=>{const k=fn(r);m[k]=(m[k]||0)+recPaid(r)});return Object.entries(m).sort((a,b)=>b[1]-a[1])};
+  const bar=(rows,total)=>rows.length?rows.map(([k,v])=>`<div class="brow"><span class="bk">${esc(k)}</span><span class="bt"><i style="width:${total?Math.max(2,Math.round(v/total*100)):0}%"></i></span><span class="bv">${money(v)}</span></div>`).join(""):`<p class="hint">Nothing in this period.</p>`;
+  const months=by(r=>(r.date||"").slice(0,7)).sort((a,b)=>a[0]<b[0]?1:-1);
+  const preset=[["month","This month"],["30","Last 30 days"],["year","This year"],["all","All time"],["custom","Custom"]].map(([k,l])=>`<button data-a="rng" data-t="${k}" aria-pressed="${S.rng.preset===k}">${l}</button>`).join("");
+  return topHTML()+`<div class="bar"><div class="tabs">${preset}</div>${S.rng.preset==="custom"?`<label class="inl">From<input id="r_from" type="date" value="${esc(S.rng.from)}"></label><label class="inl">To<input id="r_to" type="date" value="${esc(S.rng.to)}"></label>`:""}</div>
+  <div class="sum"><div><small>Money received</small><b style="color:var(--good)">${money(received)}</b></div><div><small>Invoiced</small><b>${money(invoiced)}</b></div><div class="${owed>0?"over":""}"><small>Still owed on these invoices</small><b>${money(owed)}</b></div><div><small>Quoted</small><b>${money(quoted)}</b></div></div>
+  <p class="hint" style="margin:-6px 0 16px">${recs.length} receipt${recs.length===1?"":"s"}, ${invs.length} invoice${invs.length===1?"":"s"} and ${qs.length} quote${qs.length===1?"":"s"} in this period.</p>
+  <div class="grid2" style="align-items:start">
+   <div class="panel"><h3>By payment method</h3>${bar(by(r=>methodText(r)||"Not set"),received)}</div>
+   <div class="panel"><h3>Top clients</h3>${bar(by(r=>r.client.name||"No name").slice(0,8),received)}</div>
+   <div class="panel"><h3>By month</h3>${bar(months,received)}</div>
+   <div class="panel"><h3>By service</h3>${bar(by(r=>{const iv=r.sourceId&&S.docs.find(x=>x.id===r.sourceId);return(iv&&iv.items[0]&&iv.items[0].d)||recService(r)||"Not set"}).slice(0,8),received)}</div></div>`;
+}
 function clientsHTML(){
   const e=S.ce||{id:"",name:"",phone:"",email:"",address:""};
   const owed=c=>S.docs.filter(d=>d.type==="invoice"&&norm(d.client.name)===norm(c.name)).reduce((a,d)=>a+Math.max(0,calc(d).total-paidOf(d)),0);
   const cnt=c=>S.docs.filter(d=>norm(d.client.name)===norm(c.name)).length;
-  const rows=S.clients.slice().sort((a,b)=>a.name.localeCompare(b.name)).map(c=>`<div class="rowc"><div class="cl"><b>${esc(c.name)}</b><span>${[c.phone,c.email,c.address].filter(Boolean).map(esc).join(" · ")||"No contact details"}</span></div>
-    <div class="hint">${cnt(c)} document${cnt(c)===1?"":"s"}${owed(c)>0?" · owes "+money(owed(c)):""}</div>
-    <div class="row"><button class="btn small" data-a="cl-rec" data-id="${c.id}">New receipt</button><button class="btn small" data-a="cl-edit" data-id="${c.id}">Edit</button><button class="btn small danger" data-a="cl-del" data-id="${c.id}">Delete</button></div></div>`).join("");
+  const rows=S.clients.slice().sort((a,b)=>a.name.localeCompare(b.name)).map(c=>{const T=clientTotals(c.name);return `<div class="rowc"><button class="cl clbtn" data-a="cl-open" data-id="${c.id}"><b>${esc(c.name)}</b><span>${[c.phone,c.email,c.address].filter(Boolean).map(esc).join(" · ")||"No contact details"}</span></button>
+    <div class="hint cstat">Paid <b>${money(T.paid)}</b>${T.bal>0?` · Balance <b style="color:var(--warn)">${money(T.bal)}</b>`:T.billed>0?` · <b style="color:var(--good)">Settled</b>`:""}</div>
+    <div class="row"><button class="btn small" data-a="cl-open" data-id="${c.id}">Open</button><button class="btn small" data-a="cl-rec" data-id="${c.id}">New receipt</button><button class="btn small" data-a="cl-edit" data-id="${c.id}">Edit</button><button class="btn small danger" data-a="cl-del" data-id="${c.id}">Delete</button></div></div>`}).join("");
   return topHTML()+`<div class="panel" style="margin-bottom:14px"><h3>${e.id?"Edit client":"Add a client"}</h3><form id="cf" class="stack"><div class="grid2">
-    <label>Name<input id="c_name" value="${esc(e.name)}" placeholder="e.g. Maria Bimazire" required></label>
-    <label>Phone<input id="c_phone" value="${esc(e.phone)}" inputmode="tel" placeholder="e.g. 0772 123456"></label>
+    <label>Name<input id="c_name" value="${esc(e.name)}" placeholder="e.g. Nakimbugwe Zubedah" required></label>
+    <label>Phone<input id="c_phone" value="${esc(e.phone)}" inputmode="tel" placeholder="07********"></label>
     <label>Email<input id="c_email" value="${esc(e.email)}" inputmode="email" placeholder="name@email.com"></label>
     <label>Address<input id="c_addr" value="${esc(e.address)}" placeholder="e.g. Kireka, Kampala"></label></div>
     <div class="row"><button class="btn primary" type="submit">${e.id?"Save changes":"Save client"}</button>${e.id?`<button type="button" class="btn" data-a="cl-cancel">Cancel</button>`:""}</div></form></div>
@@ -419,12 +563,20 @@ function settingsHTML(){
   <div class="panel"><div class="grid2">
    <label>Business name<input id="s_name" value="${esc(s.name)}" placeholder="e.g. Sonart Images"></label>
    <label>Currency<select id="s_cur">${CURRENCIES.map(c=>`<option ${s.currency===c?"selected":""}>${c}</option>`).join("")}</select></label>
-   <label>Phone<input id="s_phone" value="${esc(s.phone)}" inputmode="tel" placeholder="e.g. +256 789 347746"></label>
+   <label>Phone<input id="s_phone" value="${esc(s.phone)}" inputmode="tel" placeholder="07********"></label>
    <label>Email<input id="s_email" value="${esc(s.email)}" inputmode="email" placeholder="you@business.com"></label>
    <label>Address<input id="s_addr" value="${esc(s.address)}" placeholder="e.g. Kireka, Kampala, Uganda"></label></div></div>
   <div class="panel"><h3>Logo</h3><div class="row">${s.logo?`<img src="${s.logo}" alt="Your logo" style="max-height:64px;max-width:200px;background:#fff;border:1px solid var(--line);border-radius:8px;padding:6px">`:`<span class="hint">No logo yet. It appears at the top of every quote, invoice and receipt, and in the PDF.</span>`}<label style="max-width:260px"><input id="s_logo" type="file" accept="image/png,image/jpeg,image/webp,image/svg+xml"></label>${s.logo?`<button type="button" class="btn small danger" data-a="rmlogo">Remove logo</button>`:""}</div></div>
   <div class="panel"><h3>Signature</h3><div class="row">${s.sig?`<img src="${s.sig}" alt="Your signature" style="max-height:64px;max-width:200px;background:#fff;border:1px solid var(--line);border-radius:8px;padding:6px">`:`<span class="hint">Optional. Appears above "Authorized Sign". Use a PNG with a transparent background.</span>`}<label style="max-width:260px"><input id="s_sig" type="file" accept="image/png,image/jpeg,image/webp"></label>${s.sig?`<button type="button" class="btn small danger" data-a="rmsig">Remove signature</button>`:""}</div></div>
-  <div class="panel stack"><label>How clients pay (shown on quotes and invoices)<textarea id="s_pay" placeholder="Mobile Money: 07xx xxx xxx (Name)&#10;Bank: account name, number, branch">${esc(s.payInfo)}</textarea></label>
+  <div class="panel"><h3>Payment details</h3><p class="hint" style="margin:0 0 12px">Shown on every quote and invoice.</p><div class="grid2">
+   <label>Mobile Money number<input id="s_momo" value="${esc(s.momoNumber||"")}" inputmode="tel" placeholder="07********"></label>
+   <label>Mobile Money name<input id="s_momoname" value="${esc(s.momoName||"")}" placeholder="e.g. Sonart Images"></label>
+   <label>Bank<input id="s_bank" value="${esc(s.bankName||"")}" placeholder="e.g. Absa Uganda"></label>
+   <label>Account number<input id="s_acc" value="${esc(s.bankAcc||"")}" inputmode="numeric" placeholder="e.g. 6008998645"></label>
+   <label>Account name<input id="s_accname" value="${esc(s.bankAccName||"")}" placeholder="e.g. Benjamin Mugume"></label></div></div>
+  <div class="panel stack"><label>Other payment instructions (optional)<textarea id="s_pay" placeholder="e.g. Airtel Money: 07xx xxx xxx">${esc(s.payInfo)}</textarea></label>
+   <label>Document colour<input id="s_brand" type="color" value="${esc(s.brand||"#111113")}" style="padding:3px;max-width:140px"></label>
+   <label>Footer line on every document (optional)<input id="s_tag" value="${esc(s.tagline||"")}" placeholder="e.g. PHOTOGRAPHY | VIDEOGRAPHY"></label>
    <label>Default terms<textarea id="s_terms" placeholder="e.g. Quote valid for 14 days. A 50% deposit confirms the booking.">${esc(s.terms)}</textarea></label></div>
   <div class="row"><button class="btn primary" type="submit">Save details</button></div>
   ${CLOUD&&S.user?`<div class="panel"><h3>Account</h3><div class="row"><span class="hint">Signed in as <b>${esc(S.user)}</b></span><button type="button" class="btn small" data-a="signout">Sign out</button></div></div>`:""}
@@ -442,7 +594,7 @@ function textOf(d){
     L.push(`For: ${recService(d)}`,"");
     if(i.price>0)L.push(`Full price: ${money(i.price)}`);
     if(i.prev>0)L.push(`Already paid: ${money(i.prev)}`);
-    L.push(`*Paid today: ${money(i.paid)}*`,`Total paid: ${money(i.total)}`);
+    L.push(`*Amount paid today: ${money(i.paid)}*`,`Total amount paid: ${money(i.total)}`);
     if(i.bal!==null)L.push(i.bal>0?`*Balance: ${money(i.bal)}*`:"*Paid in full*");
     L.push(`Paid by: ${methodText(d)}${d.ref?" (Ref "+d.ref+")":""}`);
   }else{
@@ -452,86 +604,86 @@ function textOf(d){
     L.push("");if(num(d.taxRate))L.push(`Tax ${num(d.taxRate)}%: ${money(c.tax)}`);
     L.push(`*Total: ${money(c.total)}*`);
     if(d.type==="invoice"){const p=paidOf(d);L.push(`Paid: ${money(p)}`,`*Balance due: ${money(c.total-p)}*`)}
-    if(s.payInfo)L.push("","How to pay:",s.payInfo);
+    {const pl=payLines(s);if(pl.length||s.payInfo){L.push("","Payment details:");pl.forEach(l=>L.push(l[0]+": "+l[1]));if(s.payInfo)L.push(s.payInfo)}}
   }
   if(d.notes)L.push("",d.notes);
   return L.join("\n");
 }
 function makePDF(d){
-  const {jsPDF}=window.jspdf;const doc=new jsPDF({unit:"mm",format:"a4"});const s=S.settings,c=calc(d),T=TYPES[d.type];
-  const W=210,M=16,R=W-M;let y=14;
-  const fill=(r,g,b)=>doc.setFillColor(r,g,b),txt=(r,g,b)=>doc.setTextColor(r,g,b);
+  const {jsPDF}=window.jspdf;const doc=new jsPDF({unit:"mm",format:"a4"});
+  const s=S.settings,p=docParts(d);
+  const BC=brandColors(),BR=BC.b,ON=BC.on,W=210,H=297,M=16,R=W-M,INK=BC.ink,MUT=[96,104,112],LINE=[217,224,230];
+  const tag=!!s.tagline,BOT=tag?H-26:H-14;
+  let y=14;
+  const fill=c=>doc.setFillColor(c[0],c[1],c[2]),txt=c=>doc.setTextColor(c[0],c[1],c[2]),draw=c=>doc.setDrawColor(c[0],c[1],c[2]);
   const img=(data,x,yy,w,h)=>{try{doc.addImage(data,data.startsWith("data:image/png")?"PNG":"JPEG",x,yy,w,h)}catch(e){}};
-  if(s.logo&&s.logoW&&s.logoH){let h=24,w=h*s.logoW/s.logoH;if(w>70){w=70;h=w*s.logoH/s.logoW}img(s.logo,(W-w)/2,y,w,h);y+=h+8}
-  else{txt(20,20,20);doc.setFont("helvetica","bold").setFontSize(20).text(s.name||"",W/2,y+8,{align:"center"});y+=16}
-  txt(20,20,20);doc.setFont("helvetica","normal").setFontSize(10.5).text((s.address||"").toUpperCase(),W/2,y,{align:"center"});
-  if(s.phone||s.email){y+=5;txt(80,80,80);doc.setFontSize(9).text([s.phone,s.email].filter(Boolean).join("   |   "),W/2,y,{align:"center"})}
-  y+=11;
-  const top=y;txt(10,10,10);doc.setFont("helvetica","bold").setFontSize(32).text(T.title.toUpperCase(),M,y+10);
-  doc.setFont("helvetica","normal").setFontSize(10.5);
-  doc.text(T.label+" #"+d.number,M,y+20);doc.text("Date : "+d.date,M,y+26);
-  if(d.due&&d.type!=="receipt")doc.text((d.type==="quote"?"Valid until : ":"Due : ")+d.due,M,y+32);
-  const bx=108,bw=R-bx;fill(79,79,79);doc.rect(bx,top,bw,9,"F");
-  txt(255,255,255);doc.setFontSize(10.5).text((d.type==="receipt"?"Received From":d.type==="quote"?"Prepared For":"Invoice To")+" :",bx+4,top+6);
-  txt(10,10,10);doc.setFont("helvetica","bold").setFontSize(13.5).text(d.client.name||"-",R-3,top+18,{align:"right"});
-  doc.setFont("helvetica","normal").setFontSize(9).setTextColor(80,80,80);
-  let cy=top+23;[d.client.phone,d.client.email,d.client.address].filter(Boolean).forEach(t=>{doc.text(t,R-3,cy,{align:"right"});cy+=4.5});
-  y=Math.max(top+38,cy+6);
-  const X={sl:M+3,item:M+12,desc:M+60,price:R-56,qty:R-34,tot:R-3};
-  const head=()=>{fill(34,34,34);doc.rect(M,y,R-M,9,"F");txt(255,255,255);doc.setFont("helvetica","bold").setFontSize(9);
-    doc.text("SL.",X.sl,y+6);doc.text("ITEM",X.item,y+6);doc.text("DESCRIPTION",X.desc,y+6);doc.text("PRICE",X.price,y+6,{align:"right"});doc.text("QTY.",X.qty,y+6,{align:"right"});doc.text("TOTAL",X.tot,y+6,{align:"right"});y+=9};
+  const band=()=>{if(!tag)return;fill(BR);doc.rect(0,H-16,W,16,"F");txt(ON);doc.setFont("helvetica","bold").setFontSize(12);doc.text(s.tagline.toUpperCase(),W/2,H-6,{align:"center"})};
+  const newPage=()=>{band();doc.addPage();y=M};
+  const need=h=>{if(y+h>BOT){newPage();return true}return false};
+  // header: logo (or name) left, business details right
+  let hy=y,lh=0;
+  if(s.logo&&s.logoW&&s.logoH){let h=22,w=h*s.logoW/s.logoH;if(w>60){w=60;h=w*s.logoH/s.logoW}img(s.logo,M,y,w,h);lh=h}
+  else{txt(INK);doc.setFont("helvetica","bold").setFontSize(20).text(s.name||"",M,y+8);lh=12}
+  let ry=y+5;txt(INK);
+  if(s.logo){doc.setFont("helvetica","bold").setFontSize(14).text(s.name||"",R,ry,{align:"right"});ry+=5.5}
+  doc.setFont("helvetica","normal").setFontSize(9).setTextColor(MUT[0],MUT[1],MUT[2]);
+  [s.phone&&"Tel: "+s.phone,s.address&&"Located: "+s.address,s.email&&"Email: "+s.email].filter(Boolean).forEach(t=>{doc.text(t,R,ry,{align:"right"});ry+=4.6});
+  y=Math.max(y+lh,ry)+6;
+  draw(BR);doc.setLineWidth(1.4).line(M,y,R,y);y+=12;
+  // title (+ stamp)
+  txt(INK);doc.setFont("helvetica","bold").setFontSize(26).text(p.title.toUpperCase(),M,y+4);
+  if(p.stamp){doc.setFontSize(12);const w=doc.getTextWidth(p.stamp)+8;draw([46,125,27]);doc.setLineWidth(.7).roundedRect(R-w,y-5,w,10,1.5,1.5);txt([46,125,27]);doc.text(p.stamp,R-w/2,y+1.6,{align:"center"})}
+  y+=13;
+  // billed to (left) / meta (right)
+  const cy0=y;txt(MUT);doc.setFont("helvetica","bold").setFontSize(8).text(p.toLabel.toUpperCase(),M,y);
+  y+=6;txt(INK);doc.setFont("helvetica","bold").setFontSize(13).text(p.client.name||"-",M,y);
+  doc.setFont("helvetica","normal").setFontSize(9.5);txt(MUT);
+  [p.client.phone,p.client.email,p.client.address].filter(Boolean).forEach(t=>{y+=5;doc.text(t,M,y)});
+  let my=cy0;p.meta.forEach(m=>{txt(MUT);doc.setFont("helvetica","normal").setFontSize(9.5).text(m[0],R-48,my);txt(INK);doc.setFont("helvetica","bold").text(String(m[1]),R,my,{align:"right"});my+=5.8});
+  y=Math.max(y,my)+10;
+  // table
+  const X={n:M+3,item:M+11,desc:M+58,qty:R-64,price:R-32,tot:R-3};
+  const head=()=>{fill(BR);doc.rect(M,y,R-M,9,"F");txt(ON);doc.setFont("helvetica","bold").setFontSize(8.5);
+    doc.text("#",X.n,y+6);doc.text("ITEM",X.item,y+6);doc.text("DESCRIPTION",X.desc,y+6);doc.text("QTY",X.qty,y+6,{align:"right"});doc.text("PRICE",X.price,y+6,{align:"right"});doc.text("TOTAL",X.tot,y+6,{align:"right"});y+=9};
   head();
-  const need=h=>{if(y+h>282){doc.addPage();y=M;return true}return false};
-  let rows;
-  if(d.type==="receipt"){const i=recInfo(d),sh=i.price>0?i.price:i.paid;rows=[{d:recService(d),n:d.notes||"",q:1,p:sh}]}
-  else rows=d.items.filter(l=>l.d||l.n||num(l.p));
-  rows.forEach((l,i)=>{
-    doc.setFont("helvetica","normal").setFontSize(9);
-    const a=doc.splitTextToSize(l.d||"",X.desc-X.item-3),b=doc.splitTextToSize(l.n||"",X.price-27-X.desc-2);
-    const h=Math.max(a.length,b.length,1)*4.6+6;
-    if(need(h)){head()}
-    if(i%2===1){fill(245,245,245);doc.rect(M,y,R-M,h,"F")}
-    txt(20,20,20);const ty=y+5.5;
-    doc.text(String(i+1),X.sl,ty);doc.text(a,X.item,ty);doc.text(b,X.desc,ty);
-    doc.text(money(l.p),X.price,ty,{align:"right"});doc.text(String(num(l.q)),X.qty,ty,{align:"right"});doc.text(money(num(l.q)*num(l.p)),X.tot,ty,{align:"right"});
-    y+=h;
+  p.rows.forEach((l,i)=>{
+    doc.setFont("helvetica","normal").setFontSize(9.5);
+    const a=doc.splitTextToSize(l.d||"",X.desc-X.item-4),b=doc.splitTextToSize(l.n||"",X.qty-10-X.desc);
+    const h=Math.max(a.length,b.length,1)*4.7+6.5;
+    if(need(h+2)){head()}
+    txt(INK);const ty=y+5.6;
+    doc.text(String(i+1),X.n,ty);doc.text(a,X.item,ty);txt(MUT);doc.text(b,X.desc,ty);txt(INK);
+    doc.text(String(num(l.q)),X.qty,ty,{align:"right"});doc.text(money(l.p),X.price,ty,{align:"right"});doc.text(money(num(l.q)*num(l.p)),X.tot,ty,{align:"right"});
+    y+=h;draw(LINE);doc.setLineWidth(.25).line(M,y,R,y);
   });
-  need(60);y+=12;
-  const LX=R-72;
-  const pair=(k,v,col,bold)=>{txt(col[0],col[1],col[2]);doc.setFont("helvetica",bold?"bold":"normal").setFontSize(10.5);doc.text(k,LX,y);doc.text(v,R-3,y,{align:"right"});y+=6.5};
-  const bar=(k,v)=>{y+=3;fill(34,34,34);doc.rect(R-92,y,92,11,"F");txt(255,255,255);doc.setFont("helvetica","bold").setFontSize(11);doc.text(k,R-86,y+7.2);doc.text(v,R-4,y+7.2,{align:"right"});y+=18};
-  const BLK=[10,10,10],GRN=[46,125,27],ORG=[240,146,43];
-  if(d.type==="receipt"){
-    const i=recInfo(d);
-    txt(10,10,10);doc.setFont("helvetica","bold").setFontSize(10).text("Thank you for your business",M,y);
-    if(i.price>0)pair("Full price",money(i.price),BLK);
-    if(i.prev>0)pair("Already paid",money(i.prev),BLK);
-    bar("Paid Today",money(i.paid));
-    pair("Total Paid",money(i.total),GRN,true);
-    if(i.bal!==null)pair("Balance Due",i.bal>0?money(i.bal):"0 "+S.settings.currency,ORG,true);
-  }else{
-    txt(10,10,10);doc.setFont("helvetica","bold").setFontSize(10).text("Thank you for your business",M,y);
-    doc.text("Sub total",LX,y);doc.text(money(c.sub),R-3,y,{align:"right"});y+=7;
-    doc.setFont("helvetica","normal");
-    if(num(d.taxRate)){doc.text("Tax "+num(d.taxRate)+"%",LX,y);doc.text(money(c.tax),R-3,y,{align:"right"});y+=6}
-    bar("Total",money(c.total));
-    if(d.type==="invoice"){const p=paidOf(d);pair("Amount Paid",money(p),GRN,true);pair("Balance Due",money(c.total-p),ORG,true)}
-  }
-  const bottom=y+8;let ly=bottom;need(40);if(y<bottom-8)ly=y+8;
-  const block=(h,lines,size)=>{need(14);txt(10,10,10);doc.setFont("helvetica","bold").setFontSize(15).text(h,M,ly);ly+=8;
-    doc.setFont("helvetica","normal").setFontSize(size);lines.forEach(l=>{if(ly>285){doc.addPage();ly=M}doc.text(l,M,ly);ly+=size>10?6:4.6});ly+=7};
+  // thanks (left) + totals (right)
+  const th=p.totals.length*7+8;need(th+10);y+=9;
+  const ty0=y;txt(INK);doc.setFont("helvetica","bold").setFontSize(10.5).text(p.thanks,M,y+4);
+  const LX=R-84;
+  p.totals.forEach(t=>{
+    if(t.t==="bar"){fill(BR);doc.rect(LX-4,y-1,R-LX+4,10.5,"F");txt(ON);doc.setFont("helvetica","bold").setFontSize(11);doc.text(t.k,LX,y+6);doc.text(t.v,R-4,y+6,{align:"right"});y+=14.5}
+    else{const col=t.t==="green"?[46,125,27]:t.t==="orange"?[225,125,20]:INK;txt(col);doc.setFont("helvetica",t.t==="plain"?"normal":"bold").setFontSize(10.5);doc.text(t.k,LX,y+4);doc.text(t.v,R-4,y+4,{align:"right"});y+=7}
+  });
+  y=Math.max(y,ty0+10)+8;
+  // payment / notes / terms (left) and signature (right)
+  const startY=y;let ly=y;
   const wrap=(t,w)=>doc.splitTextToSize(t||"",w);
-  const startY=ly;
-  if(d.type==="receipt"){
-    const src=d.sourceId?S.docs.find(x=>x.id===d.sourceId):null;
-    block("Payment :",[methodText(d),...(d.ref?["Reference : "+d.ref]:[]),...(src?["For : "+src.number]:[])],10.5);
-  }else{
-    if(s.payInfo)block("Payment Info :",wrap(s.payInfo,110),10.5);
-    if(d.notes)block("Notes :",wrap(d.notes,110),10);
-    if(d.terms)block("Terms and Condition",wrap(d.terms,105),9);
+  const sect=(h,fn,hh)=>{if(ly+hh>BOT){band();doc.addPage();ly=M}txt(MUT);doc.setFont("helvetica","bold").setFontSize(8).text(h.toUpperCase(),M,ly);ly+=5.5;fn()};
+  if(p.pay.lines.length||p.pay.text){
+    sect(p.pay.head,()=>{
+      doc.setFontSize(10);
+      p.pay.lines.forEach(l=>{txt(MUT);doc.setFont("helvetica","normal").text(l[0]+":",M,ly);txt(INK);doc.setFont("helvetica","bold").text(String(l[1]),M+34,ly);ly+=5.4});
+      if(p.pay.text){txt(INK);doc.setFont("helvetica","normal");wrap(p.pay.text,100).forEach(t=>{doc.text(t,M,ly);ly+=5})}
+      ly+=5},p.pay.lines.length*6+14);
   }
-  if(s.sig&&s.sigW&&s.sigH){let h=22,w=h*s.sigW/s.sigH;if(w>55){w=55;h=w*s.sigH/s.sigW}
-    const sy=Math.max(startY+10,ly-h-14);img(s.sig,R-62+(55-w)/2,sy,w,h);txt(10,10,10);doc.setFont("helvetica","bold").setFontSize(10.5).text("Authorized Sign",R-34.5,sy+h+7,{align:"center"})}
+  if(p.notes)sect("Notes",()=>{txt(INK);doc.setFont("helvetica","normal").setFontSize(9.5);wrap(p.notes,100).forEach(t=>{if(ly>BOT){band();doc.addPage();ly=M}doc.text(t,M,ly);ly+=4.8});ly+=5},16);
+  if(p.terms)sect("Terms and conditions",()=>{txt(MUT);doc.setFont("helvetica","normal").setFontSize(8.5);wrap(p.terms,100).forEach(t=>{if(ly>BOT){band();doc.addPage();ly=M}doc.text(t,M,ly);ly+=4.2});ly+=4},16);
+  // signature block (right)
+  const sx=R-62;let sy=Math.max(startY+4,Math.min(ly-4,BOT-34));
+  if(s.sig&&s.sigW&&s.sigH){let h=20,w=h*s.sigW/s.sigH;if(w>56){w=56;h=w*s.sigH/s.sigW}img(s.sig,sx+(56-w)/2,sy,w,h)}
+  draw(INK);doc.setLineWidth(.35).line(sx,sy+23,sx+56,sy+23);
+  txt(INK);doc.setFont("helvetica","bold").setFontSize(9.5).text("Authorized sign",sx+28,sy+28.5,{align:"center"});
+  band();
   return doc;
 }
 async function downloadPDF(d){
@@ -581,6 +733,7 @@ function readEditor(){
     d.methodSel=v("methodSel")||PAY[0];d.methodOther=v("methodOther");d.ref=v("ref").trim();
   }else{
     d.taxRate=num(v("taxRate"));if(has("terms"))d.terms=v("terms");
+    if(has("payToday")){d._pt=num(v("payToday"));d._ptm=v("ptMethod");d._pto=v("ptOther")}
     document.querySelectorAll(".line").forEach(r=>{const i=+r.dataset.i;d.items[i]={d:r.querySelector('[data-f="d"]').value,n:r.querySelector('[data-f="n"]').value,q:num(r.querySelector('[data-f="q"]').value),p:num(r.querySelector('[data-f="p"]').value)}});
   }
 }
@@ -636,6 +789,9 @@ document.addEventListener("click",async e=>{
   else if(a==="del"){if(arm("delete")){await del("docs",id);toast("Deleted");go("list")}}
   else if(a==="lg-mode"){S.mode=S.mode==="up"?"in":"up";S.msg="";render()}
   else if(a==="signout"){await SB.auth.signOut();stopCloud();S.view="login";S.msg="You are signed out.";render()}
+  else if(a==="cl-open"){S.cc=id;go("client")}
+  else if(a==="cl-inv"||a==="cl-quo"){const c=S.clients.find(x=>x.id===id);startEdit(blank(a==="cl-inv"?"invoice":"quote",{client:{name:c.name,phone:c.phone,email:c.email,address:c.address}}))}
+  else if(a==="rng"){S.rng.preset=b.dataset.t;render()}
   else if(a==="cl-edit"){S.ce=S.clients.find(x=>x.id===id);render();window.scrollTo(0,0)}
   else if(a==="cl-cancel"){S.ce=null;render()}
   else if(a==="cl-del"){if(arm("delete")){await del("clients",id);render()}}
@@ -657,6 +813,7 @@ document.addEventListener("input",e=>{
       if(prev&&pr&&!pr.value)pr.value=prev.price}
     if(t.id==="cname"&&S.edit.type==="receipt"){const sv=g("service"),pr=g("price");if(sv&&pr&&!pr.value&&sv.value){const prev=S.docs.filter(r=>r.type==="receipt"&&norm(r.client.name)===norm(t.value)&&norm(recService(r))===norm(sv.value)&&num(r.price)>0).sort((a,b)=>(b.createdAt||0)-(a.createdAt||0))[0];if(prev)pr.value=prev.price}}
     if(t.id==="methodSel"){const w=g("otherWrap");if(w)w.hidden=t.value!=="Other"}
+    if(t.id==="ptMethod"){const w=g("ptOtherWrap");if(w)w.hidden=t.value!=="Other"}
     refreshTotals();
   }
 });
@@ -670,6 +827,7 @@ document.addEventListener("change",async e=>{
     try{Object.assign(S.settings,await loadLogo(t.files[0]));await saveSettings();render();toast("Logo added")}
     catch(err){toast("Could not read that image. Try a PNG or JPG.")}
     return}
+  if(t.id==="r_from"||t.id==="r_to"){S.rng.from=document.getElementById("r_from").value;S.rng.to=document.getElementById("r_to").value;render();return}
   if(t.id==="qstatus"){const d=S.docs.find(x=>x.id===S.cur);d.status=t.value;await put("docs",d);render()}
   if(t.id==="methodSel"&&S.view==="edit"){const w=document.getElementById("otherWrap");if(w)w.hidden=t.value!=="Other"}
 });
@@ -703,14 +861,24 @@ document.addEventListener("submit",async e=>{
       await rememberService(d.service,d.price,"");
     }else{
       d.items=d.items.filter(l=>l.d||l.n||num(l.p));
+      if(d.type==="invoice"&&num(d._pt)>0&&!d.client.name){toast("Add the client's name first.");return}
       d.items.forEach(l=>{const fs=findService(l.d);if(fs)l.d=fs.name});
       if(!d.items.length){toast("Add at least one item.");return}
       for(const l of d.items)await rememberService(l.d,l.p,l.n);
     }
     await rememberClient(d.client);
-    await put("docs",d);toast(TYPES[d.type].label+" saved");go("view",d.id);
+    const pt=num(d._pt),ptm=d._ptm||PAY[0],pto=d._pto||"";
+    delete d._pt;delete d._ptm;delete d._pto;
+    await put("docs",d);await bumpCounter(d);
+    if(d.type==="invoice"&&pt>0){
+      const before=paidOf(d);
+      const r=blank("receipt",{client:Object.assign({},d.client),service:"Payment for "+d.number,price:calc(d).total,paid:pt,prev:before,sourceId:d.id,methodSel:ptm,methodOther:pto,date:d.date});
+      r.method=methodText(r);r.items=[{d:r.service,n:"",q:1,p:pt}];
+      await put("docs",r);await bumpCounter(r);
+    }
+    toast(TYPES[d.type].label+" saved");go("view",d.id);
   }else if(e.target.id==="sf"){
-    S.settings=Object.assign({},S.settings,{name:v("s_name").trim()||"Billing",currency:v("s_cur"),phone:v("s_phone").trim(),email:v("s_email").trim(),address:v("s_addr").trim(),payInfo:v("s_pay"),terms:v("s_terms")});
+    S.settings=Object.assign({},S.settings,{name:v("s_name").trim()||"Billing",currency:v("s_cur"),phone:v("s_phone").trim(),email:v("s_email").trim(),address:v("s_addr").trim(),payInfo:v("s_pay"),terms:v("s_terms"),momoNumber:v("s_momo").trim(),momoName:v("s_momoname").trim(),bankName:v("s_bank").trim(),bankAcc:v("s_acc").trim(),bankAccName:v("s_accname").trim(),tagline:v("s_tag").trim(),brand:v("s_brand")||"#111113"});
     await saveSettings();toast("Details saved");go("list");
   }else if(e.target.id==="cf"){
     const o={id:S.ce?S.ce.id:uid(),name:v("c_name").trim(),phone:v("c_phone").trim(),email:v("c_email").trim(),address:v("c_addr").trim()};
@@ -764,7 +932,7 @@ async function startCloud(session){
 function refresh(){
   clearTimeout(pullT);
   pullT=setTimeout(async()=>{
-    if(!UID||!["list","view","clients","services"].includes(S.view))return;
+    if(!UID||!["list","view","clients","client","services","totals"].includes(S.view))return;
     if(await pull())render();
   },350);
 }
@@ -787,7 +955,7 @@ function stopCloud(){
   try{
     DB=(typeof claude!=="undefined")?await claude.use("db"):null;
     if(DB){
-      const live=()=>["list","view","clients","services"].includes(S.view);
+      const live=()=>["list","view","clients","client","services","totals"].includes(S.view);
       DB.doc("app/settings").onSnapshot(s=>{if(s.exists){S.settings=Object.assign(S.settings,s.data());if(S.view==="list")render()}},()=>{});
       DB.collection("docs").onSnapshot(q=>{S.docs=q.docs.map(x=>x.data());if(live())render()},()=>{DB=null});
       DB.collection("clients").onSnapshot(q=>{S.clients=q.docs.map(x=>x.data());if(S.view==="clients")render()},()=>{});

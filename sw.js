@@ -1,5 +1,5 @@
 // Bitabo service worker: lets the app open offline once it has been loaded.
-const CACHE = "bitabo-v2";
+const CACHE = "bitabo-v5";
 const SHELL = ["./", "index.html", "config.js", "manifest.json", "icon-192.png", "icon-512.png", "icon-maskable-512.png", "apple-touch-icon.png"];
 
 self.addEventListener("install", e => {
