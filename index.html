@@ -173,6 +173,38 @@ label.inl input{width:auto}
 .logo{display:flex;align-items:center;gap:10px}
 .logo h1{color:var(--accent-fg)}
 .brand .logo .mark,.logo .mark{display:grid;place-items:center;width:34px;height:34px;border-radius:9px;background:var(--accent);color:var(--accent-ink);font-family:var(--f-display);font-weight:700;font-size:21px;line-height:1}
+
+/* phone layout */
+html{-webkit-text-size-adjust:100%}
+body{overflow-x:hidden}
+.wrap,.top,.bar,.panel,.list,.sum,.grid2{min-width:0}
+.tabs{max-width:100%;overflow-x:auto;scrollbar-width:none}
+.tabs::-webkit-scrollbar{display:none}
+.tabs button{white-space:nowrap}
+@media (max-width:640px){
+  body{padding-inline:14px}
+  input,select,textarea{font-size:16px;min-height:46px}
+  .btn{min-height:46px}
+  .btn.small{min-height:38px;padding:6px 12px}
+  .top{gap:10px;margin-bottom:12px}
+  .top>.row{width:100%;display:grid;grid-template-columns:1fr 1fr;gap:8px}
+  .top>.row .btn{width:100%;padding-inline:8px}
+  .navtabs{width:100%;display:grid;grid-template-columns:repeat(4,1fr)}
+  .navtabs button{padding:9px 4px;text-align:center}
+  .sum{grid-template-columns:1fr 1fr;gap:8px}
+  .sum>div{padding:10px 12px}
+  .sum b{font-size:15px;word-break:break-word}
+  .bar{flex-direction:column;align-items:stretch}
+  .bar .tabs{width:100%;overflow-x:auto}
+  .search{width:100%;min-width:0}
+  .item{grid-template-columns:minmax(0,1fr) auto}
+  .rowc{grid-template-columns:minmax(0,1fr);gap:8px}
+  .rowc .row{justify-content:flex-start}
+  h2{font-size:20px}
+  .paperbox{overflow:hidden}
+  .logo h1{font-size:20px}
+}
+.panel .rowc{padding-inline:0}
 </style>
 
 <div class="wrap" id="app"></div>
@@ -256,6 +288,7 @@ function render(){
   const v=S.view;
   a.innerHTML=v==="login"?loginHTML():v==="client"?clientDetailHTML():v==="totals"?reportHTML():v==="edit"?(S.edit.type==="receipt"?receiptEditorHTML():editorHTML()):v==="view"?viewHTML():v==="settings"?settingsHTML():v==="clients"?clientsHTML():v==="services"?servicesHTML():listHTML();
   if(v==="edit"&&S.edit.type==="receipt")updateRecSummary();
+  if(v==="view")fitPaper();
 }
 function topHTML(){
   const nav=[["list","Documents"],["clients","Clients"],["services","Services"],["totals","Totals"]].map(([k,l])=>`<button data-a="nav" data-t="${k}" aria-pressed="${S.view===k||(k==="clients"&&S.view==="client")}">${l}</button>`).join("");
@@ -375,7 +408,7 @@ function viewHTML(){
   return `<button class="btn back" data-a="list">‹ All documents</button>
   <div class="row" style="margin-bottom:14px;justify-content:space-between"><div class="row"><h2>${esc(d.number)}</h2><span class="pill ${cl}">${esc(st)}</span></div>
   <div class="row">${acts}<button class="btn" data-a="pdf" data-id="${d.id}">Download PDF</button><button class="btn" data-a="copy" data-id="${d.id}">Copy for WhatsApp</button><button class="btn" data-a="edit" data-id="${d.id}">Edit</button><button class="btn danger" data-a="del" data-id="${d.id}">Delete</button></div></div>
-  <div class="paperbox">${paperHTML(d)}</div>`;
+  <div class="paperbox">${paperHTML(d)}</div>${paymentsHTML(d)}`;
 }
 function clientFields(d){
   return `<div class="grid2">
@@ -459,6 +492,22 @@ function loginHTML(){
    <p class="hint" style="margin:0">Your quotes, invoices, receipts, clients and services are saved to your account, so you see the same data on your phone and your computer.</p></form></div>`;
 }
 
+/* ---------- payments: list, remove, keep running totals right ---------- */
+async function recomputePrev(key){
+  const list=S.docs.filter(x=>x.type==="receipt"&&recKey(x)===key).sort((a,b)=>(a.createdAt||0)-(b.createdAt||0));
+  let run=0;
+  for(const r of list){if(r.prev===undefined||r.prev===null||num(r.prev)!==run){r.prev=run;await put("docs",r)}run+=recPaid(r)}
+}
+function paymentsHTML(d){
+  let list=[];
+  if(d.type==="invoice")list=S.docs.filter(r=>r.type==="receipt"&&r.sourceId===d.id);
+  else if(d.type==="receipt")list=S.docs.filter(r=>r.type==="receipt"&&recKey(r)===recKey(d));
+  if(!list.length)return "";
+  list.sort((a,b)=>(a.createdAt||0)-(b.createdAt||0));
+  return `<div class="panel" style="margin-top:16px"><h3>Payments received</h3>${list.map(r=>`<div class="rowc pay"><div class="cl"><b>${money(recPaid(r))}</b><span>${esc(r.date)} · ${esc(methodText(r))}${r.ref?" · "+esc(r.ref):""} · ${esc(r.number)}</span></div>
+    <div class="row"><button class="btn small" data-a="open" data-id="${r.id}">View</button><button class="btn small" data-a="edit" data-id="${r.id}">Edit</button><button class="btn small danger" data-a="rmpay" data-id="${r.id}" data-from="${d.id}">Remove</button></div></div>`).join("")}
+    <p class="hint" style="margin:10px 0 0">Made a mistake? Remove or edit the payment. The balance updates straight away.</p></div>`;
+}
 /* ---------- clients: balances and detail ---------- */
 function acctsFor(name){
   const n=norm(name),A=[];
@@ -743,6 +792,13 @@ function refreshTotals(){
   const t=$("#totals");if(t)t.innerHTML=totalsHTML(S.edit,"");
   document.querySelectorAll(".line").forEach(r=>{const l=S.edit.items[+r.dataset.i];r.querySelector(".amt").textContent=money(num(l.q)*num(l.p))});
 }
+function fitPaper(){
+  const p=document.querySelector(".paper"),b=document.querySelector(".paperbox");if(!p||!b)return;
+  p.style.zoom="";p.style.width="";p.style.maxWidth="";p.style.minWidth="";
+  const avail=b.clientWidth,full=794;
+  if(avail>0&&avail<full){p.style.width=full+"px";p.style.maxWidth="none";p.style.minWidth="0";p.style.zoom=(avail/full).toFixed(4)}
+}
+window.addEventListener("resize",fitPaper);
 function go(view,id){S.view=view;if(id!==undefined)S.cur=id;render();window.scrollTo(0,0)}
 function startEdit(d){
   const c=JSON.parse(JSON.stringify(d));
@@ -786,7 +842,12 @@ document.addEventListener("click",async e=>{
     q.status="accepted";await put("docs",q);startEdit(inv)}
   else if(a==="pay"){startEdit(prefillReceiptFromInvoice(get()))}
   else if(a==="more"){const r=get();startEdit(blank("receipt",{client:Object.assign({},r.client),service:recService(r),price:r.price,paid:"",sourceId:r.sourceId||"",methodSel:r.methodSel||PAY[0],methodOther:r.methodOther||""}))}
-  else if(a==="del"){if(arm("delete")){await del("docs",id);toast("Deleted");go("list")}}
+  else if(a==="del"){if(arm("delete")){const d0=get(),k=d0&&d0.type==="receipt"?recKey(d0):null;await del("docs",id);if(k)await recomputePrev(k);toast("Deleted");go("list")}}
+  else if(a==="rmpay"){if(arm("remove")){
+    const r=get();if(!r)return;const k=recKey(r),from=b.dataset.from;
+    await del("docs",id);await recomputePrev(k);toast("Payment removed");
+    if(S.cur===id){if(from&&from!==id&&S.docs.some(x=>x.id===from))go("view",from);else go("list")}else render();
+  }}
   else if(a==="lg-mode"){S.mode=S.mode==="up"?"in":"up";S.msg="";render()}
   else if(a==="signout"){await SB.auth.signOut();stopCloud();S.view="login";S.msg="You are signed out.";render()}
   else if(a==="cl-open"){S.cc=id;go("client")}
@@ -870,6 +931,7 @@ document.addEventListener("submit",async e=>{
     const pt=num(d._pt),ptm=d._ptm||PAY[0],pto=d._pto||"";
     delete d._pt;delete d._ptm;delete d._pto;
     await put("docs",d);await bumpCounter(d);
+    if(d.type==="receipt")await recomputePrev(recKey(d));
     if(d.type==="invoice"&&pt>0){
       const before=paidOf(d);
       const r=blank("receipt",{client:Object.assign({},d.client),service:"Payment for "+d.number,price:calc(d).total,paid:pt,prev:before,sourceId:d.id,methodSel:ptm,methodOther:pto,date:d.date});
