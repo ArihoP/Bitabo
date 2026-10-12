@@ -168,3 +168,4 @@ Out of the box, Bitabo keeps data in one browser. To log in from any device, con
 | `supabase-setup.sql` | The one-time database setup you run in Supabase |
 | `icon-192.png`, `icon-512.png`, `icon-maskable-512.png`, `apple-touch-icon.png` | The app icon in the sizes phones need |
 | `README.md` | This guide |
+
